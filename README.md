@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Quantum Algorithm Explorer
 
-## Getting Started
+Plataforma interativa para explorar e selecionar algoritmos quânticos com base nas características do problema. O sistema oferece uma biblioteca organizada e atualizável, permitindo comparação entre algoritmos e apoiando a tomada de decisão em contextos de computação quântica.
 
-First, run the development server:
+# 📌 Sobre o projeto
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+O Quantum Algorithm Explorer surge da necessidade de organizar e facilitar o acesso a algoritmos quânticos, que atualmente são frequentemente apresentados de forma fragmentada (ex.: slides e tabelas isoladas), dificultando a análise e escolha adequada.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A proposta é transformar esse processo em uma experiência interativa, visual e orientada à decisão.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# 🎯 Objetivos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Organizar algoritmos quânticos em uma biblioteca estruturada
+- Permitir a busca por algoritmos com base no tipo de problema
+- Facilitar a comparação entre diferentes algoritmos
+- Possibilitar atualização contínua da base de dados
+- Apoiar profissionais e pesquisadores na escolha do algoritmo ideal
 
-## Learn More
+# Funcionalidades principais
+- Busca por tipo de problema
+- Biblioteca de algoritmos quânticos
+- Comparação entre algoritmos
+- Visualização detalhada de cada algoritmo
+- Interface administrativa para atualização dos dados
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# 👤 Público-alvo
+- Profissionais de TI
+- Pesquisadores em computação quântica
+- Estudantes das áreas de tecnologia e exatas
+- Equipes que utilizam algoritmos quânticos em projetos
