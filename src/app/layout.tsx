@@ -1,25 +1,32 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import Header from '../components/layout/Header'
-import Footer from '../components/layout/Footer'
-
-export const metadata: Metadata = {
-  title: 'Quantum Algorithm Library',
-  description: 'Plataforma para consulta e organização de algoritmos quânticos',
-}
+import "./globals.css";
+import { Header } from "@/components/layout/Header";
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
-      <body>
+    <html lang="en">
+      <body
+        style={{
+          margin: 0,
+          fontFamily: "Arial, sans-serif",
+          backgroundColor: "#f8fafc",
+          color: "#111827",
+        }}
+      >
         <Header />
-        <main>{children}</main>
-        <Footer />
+        <main
+          style={{
+            maxWidth: "1200px",
+            margin: "0 auto",
+            padding: "24px",
+          }}
+        >
+          {children}
+        </main>
       </body>
     </html>
-  )
+  );
 }

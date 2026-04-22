@@ -26,31 +26,31 @@ export const algorithms: Algorithm[] = [
     ],
     tags: ["search", "quantum speedup", "database"]
   },
-  {
-    id: "2",
-    name: "Shor's Algorithm",
-    slug: "shors-algorithm",
-    category: "Cryptography",
-    shortDescription: "Efficient factorization of large integers.",
-    fullDescription:
-      "Shor's Algorithm is one of the most famous quantum algorithms, mainly known for solving integer factorization exponentially faster than known classical methods in specific contexts.",
-    applications: ["Integer factorization", "Cryptanalysis", "Number theory"],
-    characteristics: [
-      "Exponential speedup in factorization",
-      "High theoretical relevance",
-      "Strong impact on cryptography"
-    ],
-    complexity: "Polynomial time",
-    advantages: [
-      "Breakthrough for quantum cryptanalysis",
-      "High academic and practical relevance"
-    ],
-    limitations: [
-      "Hard to run on current quantum hardware at large scale",
-      "Very specialized use case"
-    ],
-    tags: ["cryptography", "factorization", "security"]
-  },
+{
+  id: "2",
+  name: "Shor's Algorithm",
+  slug: "shors-algorithm",
+  category: "Cryptography",
+  shortDescription: "Efficient factorization of large integers.",
+  fullDescription:
+    "Shor's Algorithm is one of the most famous quantum algorithms, mainly known for solving integer factorization exponentially faster than known classical methods in specific contexts.",
+  applications: ["Integer factorization", "Cryptanalysis", "Number theory"],
+  characteristics: [
+    "Exponential speedup in factorization",
+    "High theoretical relevance",
+    "Strong impact on cryptography"
+  ],
+  complexity: "Polynomial time",
+  advantages: [
+    "Breakthrough for quantum cryptanalysis",
+    "High academic and practical relevance"
+  ],
+  limitations: [
+    "Hard to run on current quantum hardware at large scale",
+    "Very specialized use case"
+  ],
+  tags: ["cryptography", "factorization", "security"]
+},
   {
     id: "3",
     name: "Quantum Approximate Optimization Algorithm",
