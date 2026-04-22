@@ -48,3 +48,6 @@ export function Header() {
     </header>
   );
 }
+
+// TODO: implementar troca real de idioma (i18n)
+// Atualmente apenas visual (PT | EN)
