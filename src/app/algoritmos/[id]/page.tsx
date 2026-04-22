@@ -14,37 +14,67 @@ export default async function AlgorithmDetailPage({
   const algorithm = algorithms.find((item) => item.slug === id);
 
   if (!algorithm) {
-    return <h1>Algoritmo não encontrado</h1>;
+    return (
+      <section className="page-section">
+        <div className="container">
+          <h1>Algoritmo não encontrado</h1>
+        </div>
+      </section>
+    );
   }
 
   return (
-    <section style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-      <div>
-        <span>{algorithm.category}</span>
-        <h1>{algorithm.name}</h1>
-        <p>{algorithm.fullDescription}</p>
-      </div>
+    <section className="page-section">
+      <div className="container">
+        <article className="card detail-card">
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <span className="tag">{algorithm.category}</span>
+            <h1 style={{ margin: 0, fontSize: "36px" }}>{algorithm.name}</h1>
+            <p className="muted" style={{ margin: 0, lineHeight: 1.7 }}>
+              {algorithm.fullDescription}
+            </p>
+          </div>
 
-      <div>
-        <h2>Applications</h2>
-        <ul>
-          {algorithm.applications.map((application) => (
-            <li key={application}>{application}</li>
-          ))}
-        </ul>
-      </div>
+          <div className="list-block">
+            <h2>Applications</h2>
+            <ul>
+              {algorithm.applications.map((application) => (
+                <li key={application}>{application}</li>
+              ))}
+            </ul>
+          </div>
 
-      <div>
-        <h2>Characteristics</h2>
-        <ul>
-          {algorithm.characteristics.map((characteristic) => (
-            <li key={characteristic}>{characteristic}</li>
-          ))}
-        </ul>
-      </div>
+          <div className="list-block">
+            <h2>Characteristics</h2>
+            <ul>
+              {algorithm.characteristics.map((characteristic) => (
+                <li key={characteristic}>{characteristic}</li>
+              ))}
+            </ul>
+          </div>
 
-      <div>
-        <strong>Complexity:</strong> {algorithm.complexity ?? "Not informed"}
+          <div className="list-block">
+            <h2>Advantages</h2>
+            <ul>
+              {algorithm.advantages?.map((advantage) => (
+                <li key={advantage}>{advantage}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="list-block">
+            <h2>Limitations</h2>
+            <ul>
+              {algorithm.limitations?.map((limitation) => (
+                <li key={limitation}>{limitation}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <strong>Complexity:</strong> {algorithm.complexity ?? "Not informed"}
+          </div>
+        </article>
       </div>
     </section>
   );

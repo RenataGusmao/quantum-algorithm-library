@@ -8,24 +8,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        style={{
-          margin: 0,
-          fontFamily: "Arial, sans-serif",
-          backgroundColor: "#f8fafc",
-          color: "#111827",
-        }}
-      >
+      <body>
         <Header />
-        <main
-          style={{
-            maxWidth: "1200px",
-            margin: "0 auto",
-            padding: "24px",
-          }}
-        >
-          {children}
-        </main>
+        <main>{children}</main>
       </body>
     </html>
   );

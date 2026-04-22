@@ -7,41 +7,47 @@ interface AlgorithmCardProps {
 
 export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
   return (
-    <article
-      style={{
-        border: "1px solid #e5e7eb",
-        borderRadius: "12px",
-        padding: "16px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "12px",
-        backgroundColor: "#ffffff",
-      }}
-    >
-      <div>
-        <span
-          style={{
-            display: "inline-block",
-            fontSize: "12px",
-            padding: "4px 8px",
-            borderRadius: "999px",
-            backgroundColor: "#eef2ff",
-          }}
-        >
-          {algorithm.category}
-        </span>
-      </div>
+    <article className="card">
+      <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+        <div>
+          <span className="tag">{algorithm.category}</span>
+        </div>
 
-      <div>
-        <h3 style={{ margin: "0 0 8px 0" }}>{algorithm.name}</h3>
-        <p style={{ margin: 0 }}>{algorithm.shortDescription}</p>
-      </div>
+        <div>
+          <h3 style={{ margin: "0 0 10px 0", fontSize: "22px" }}>
+            {algorithm.name}
+          </h3>
+          <p className="muted" style={{ margin: 0, lineHeight: 1.6 }}>
+            {algorithm.shortDescription}
+          </p>
+        </div>
 
-      <div>
-        <strong>Complexity:</strong> {algorithm.complexity ?? "Not informed"}
-      </div>
+        <div className="muted" style={{ fontSize: "14px" }}>
+          <strong style={{ color: "var(--text)" }}>Complexity:</strong>{" "}
+          {algorithm.complexity ?? "Not informed"}
+        </div>
 
-      <Link href={`/algoritmos/${algorithm.slug}`}>Ver detalhes</Link>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+          {algorithm.tags?.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              style={{
+                fontSize: "12px",
+                padding: "6px 10px",
+                borderRadius: "999px",
+                background: "#f1f5f9",
+                color: "#334155",
+              }}
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <Link href={`/algoritmos/${algorithm.slug}`} className="button-link">
+          Ver detalhes
+        </Link>
+      </div>
     </article>
   );
 }

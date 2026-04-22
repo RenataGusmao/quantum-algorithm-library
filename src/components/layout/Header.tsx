@@ -1,28 +1,30 @@
 import Link from "next/link";
 
+const navItems = [
+  { href: "/", label: "Home" },
+  { href: "/algoritmos", label: "Algoritmos" },
+  { href: "/comparar", label: "Comparar" },
+  { href: "/busca-guiada", label: "Busca Guiada" },
+  { href: "/sobre", label: "Sobre" },
+  { href: "/admin", label: "Admin" },
+];
+
 export function Header() {
   return (
-    <header
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "16px 24px",
-        borderBottom: "1px solid #e5e7eb",
-      }}
-    >
-      <div>
-        <h2 style={{ margin: 0 }}>Quantum Algorithm Library</h2>
-      </div>
+    <header className="topbar">
+      <div className="container topbar-inner">
+        <Link href="/" className="header-brand">
+          Quantum Algorithm Library
+        </Link>
 
-      <nav style={{ display: "flex", gap: "16px" }}>
-        <Link href="/">Home</Link>
-        <Link href="/algoritmos">Algoritmos</Link>
-        <Link href="/comparar">Comparar</Link>
-        <Link href="/busca-guiada">Busca Guiada</Link>
-        <Link href="/sobre">Sobre</Link>
-        <Link href="/admin">Admin</Link>
-      </nav>
+        <nav className="topbar-nav">
+          {navItems.map((item) => (
+            <Link key={item.href} href={item.href} className="header-link">
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
     </header>
   );
 }
