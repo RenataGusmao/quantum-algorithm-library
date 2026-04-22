@@ -6,10 +6,11 @@ export default function HomePage() {
     <section className="page-section">
       <div className="container">
         <div className="hero">
-          <h1>Explore Quantum Algorithms</h1>
+          <h1>Explore Algoritmos Quânticos</h1>
           <p>
-            Find, compare and understand the best quantum algorithm for your
-            problem through a structured and intuitive experience.
+            Encontre, compare e compreenda o algoritmo quântico mais adequado
+            para o seu problema por meio de uma experiência estruturada e
+            intuitiva.
           </p>
         </div>
 

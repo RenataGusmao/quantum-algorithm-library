@@ -36,7 +36,7 @@ export default async function AlgorithmDetailPage({
           </div>
 
           <div className="list-block">
-            <h2>Applications</h2>
+            <h2>Aplicações</h2>
             <ul>
               {algorithm.applications.map((application) => (
                 <li key={application}>{application}</li>
@@ -45,7 +45,7 @@ export default async function AlgorithmDetailPage({
           </div>
 
           <div className="list-block">
-            <h2>Characteristics</h2>
+            <h2>Características</h2>
             <ul>
               {algorithm.characteristics.map((characteristic) => (
                 <li key={characteristic}>{characteristic}</li>
@@ -54,7 +54,7 @@ export default async function AlgorithmDetailPage({
           </div>
 
           <div className="list-block">
-            <h2>Advantages</h2>
+            <h2>Vantagens</h2>
             <ul>
               {algorithm.advantages?.map((advantage) => (
                 <li key={advantage}>{advantage}</li>
@@ -63,7 +63,7 @@ export default async function AlgorithmDetailPage({
           </div>
 
           <div className="list-block">
-            <h2>Limitations</h2>
+            <h2>Limitações</h2>
             <ul>
               {algorithm.limitations?.map((limitation) => (
                 <li key={limitation}>{limitation}</li>
@@ -72,7 +72,7 @@ export default async function AlgorithmDetailPage({
           </div>
 
           <div>
-            <strong>Complexity:</strong> {algorithm.complexity ?? "Not informed"}
+            <strong>Complexidade:</strong> {algorithm.complexity ?? "Não informado"}
           </div>
         </article>
       </div>

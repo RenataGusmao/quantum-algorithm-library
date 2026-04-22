@@ -14,7 +14,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
         </div>
 
         <div>
-          <h3 style={{ margin: "0 0 10px 0", fontSize: "22px" }}>
+          <h3 style={{ margin: "0 0 10px 0", fontSize: "22px", fontWeight: 700 }}>
             {algorithm.name}
           </h3>
           <p className="muted" style={{ margin: 0, lineHeight: 1.6 }}>
@@ -23,8 +23,8 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
         </div>
 
         <div className="muted" style={{ fontSize: "14px" }}>
-          <strong style={{ color: "var(--text)" }}>Complexity:</strong>{" "}
-          {algorithm.complexity ?? "Not informed"}
+          <strong style={{ color: "var(--text)" }}>Complexidade:</strong>{" "}
+          {algorithm.complexity ?? "Não informado"}
         </div>
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
@@ -44,9 +44,11 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
           ))}
         </div>
 
-        <Link href={`/algoritmos/${algorithm.slug}`} className="button-link">
-          Ver detalhes
-        </Link>
+        <div style={{ marginTop: "8px" }}>
+          <Link href={`/algoritmos/${algorithm.slug}`} className="button-link">
+            Ver detalhes
+          </Link>
+        </div>
       </div>
     </article>
   );

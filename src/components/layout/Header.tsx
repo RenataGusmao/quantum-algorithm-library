@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const navItems = [
-  { href: "/", label: "Home" },
+  { href: "/", label: "Início" },
   { href: "/algoritmos", label: "Algoritmos" },
   { href: "/comparar", label: "Comparar" },
   { href: "/busca-guiada", label: "Busca Guiada" },
@@ -17,13 +17,33 @@ export function Header() {
           Quantum Algorithm Library
         </Link>
 
-        <nav className="topbar-nav">
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="header-link">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+          <nav className="topbar-nav">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} className="header-link">
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "8px 12px",
+              border: "1px solid var(--border)",
+              borderRadius: "999px",
+              background: "var(--surface)",
+              fontSize: "14px",
+              fontWeight: 600,
+            }}
+          >
+            <span>PT</span>
+            <span className="muted">|</span>
+            <span className="muted">EN</span>
+          </div>
+        </div>
       </div>
     </header>
   );
