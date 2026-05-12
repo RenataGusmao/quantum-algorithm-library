@@ -1,81 +1,67 @@
-import { algorithms } from "@/data/algorithms";
+"use client";
+import { use } from "react";
+import { useRouter } from "next/navigation";
+import { useAlgorithms } from "@/lib/useAlgorithms";
+import { AlgorithmForm } from "@/components/admin/AlgorithmForm";
 
-interface AlgorithmDetailPageProps {
-  params: Promise<{
-    id: string;
-  }>;
+interface EditAlgorithmPageProps {
+  params: Promise<{ id: string }>;
 }
 
-export default async function AlgorithmDetailPage({
-  params,
-}: AlgorithmDetailPageProps) {
-  const { id } = await params;
+export default function EditAlgorithmPage({ params }: EditAlgorithmPageProps) {
+  const { id } = use(params);
+  const router = useRouter();
+  const { algorithms, loaded, updateAlgorithm } = useAlgorithms();
 
-  const algorithm = algorithms.find((item) => item.slug === id);
+  if (!loaded) {
+    return (
+      <div>
+        <div className="admin-page-header">
+          <h1>Editar Algoritmo</h1>
+        </div>
+        <p className="muted">Carregando...</p>
+      </div>
+    );
+  }
+
+  const algorithm = algorithms.find((a) => a.id === id);
 
   if (!algorithm) {
     return (
-      <section className="page-section">
-        <div className="container">
-          <h1>Algoritmo não encontrado</h1>
+      <div>
+        <div className="admin-page-header">
+          <h1>Editar Algoritmo</h1>
         </div>
-      </section>
+        <div className="card" style={{ padding: "40px", textAlign: "center" }}>
+          <p className="muted" style={{ margin: "0 0 16px 0" }}>
+            Algoritmo não encontrado.
+          </p>
+          <button
+            className="btn btn-ghost"
+            onClick={() => router.push("/admin/algoritmos")}
+          >
+            Voltar para a lista
+          </button>
+        </div>
+      </div>
     );
   }
 
   return (
-    <section className="page-section">
-      <div className="container">
-        <article className="card detail-card">
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-            <span className="tag">{algorithm.category}</span>
-            <h1 style={{ margin: 0, fontSize: "36px" }}>{algorithm.name}</h1>
-            <p className="muted" style={{ margin: 0, lineHeight: 1.7 }}>
-              {algorithm.fullDescription}
-            </p>
-          </div>
-
-          <div className="list-block">
-            <h2>Aplicações</h2>
-            <ul>
-              {algorithm.applications.map((application) => (
-                <li key={application}>{application}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="list-block">
-            <h2>Características</h2>
-            <ul>
-              {algorithm.characteristics.map((characteristic) => (
-                <li key={characteristic}>{characteristic}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="list-block">
-            <h2>Vantagens</h2>
-            <ul>
-              {algorithm.advantages?.map((advantage) => (
-                <li key={advantage}>{advantage}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="list-block">
-            <h2>Limitações</h2>
-            <ul>
-              {algorithm.limitations?.map((limitation) => (
-                <li key={limitation}>{limitation}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <strong>Complexidade:</strong> {algorithm.complexity ?? "Não informado"}
-          </div>
-        </article>
+    <div>
+      <div className="admin-page-header">
+        <h1>Editar: {algorithm.name}</h1>
       </div>
-    </section>
+
+      <AlgorithmForm
+        initial={algorithm}
+        submitLabel="Salvar alterações"
+        onCancel={() => router.push("/admin/algoritmos")}
+        onSubmit={(data) => {
+          updateAlgorithm(id, data);
+          router.push("/admin/algoritmos");
+        }}
+      />
+    </div>
   );
 }
