@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const navItems = [
@@ -13,12 +14,25 @@ export function Header() {
   return (
     <header className="topbar">
       <div className="container topbar-inner">
-        <Link href="/" className="header-brand">
-          Quantum Algorithm Library
+        <Link
+          href="/"
+          className="header-brand"
+          aria-label="Accenture Quantum Algorithm Library"
+        >
+          <Image
+            src="/brand/accenture_logo.png"
+            alt="Accenture"
+            width={162}
+            height={42}
+            priority
+            className="header-logo"
+          />
+
+          <span>Quantum Algorithm Library</span>
         </Link>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
-          <nav className="topbar-nav">
+        <div className="topbar-actions">
+          <nav className="topbar-nav" aria-label="Navegação principal">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} className="header-link">
                 {item.label}
@@ -26,28 +40,13 @@ export function Header() {
             ))}
           </nav>
 
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "8px 12px",
-              border: "1px solid var(--border)",
-              borderRadius: "999px",
-              background: "var(--surface)",
-              fontSize: "14px",
-              fontWeight: 600,
-            }}
-          >
+          <div className="language-switch" aria-label="Idioma atual">
             <span>PT</span>
-            <span className="muted">|</span>
-            <span className="muted">EN</span>
+            <span>|</span>
+            <span>EN</span>
           </div>
         </div>
       </div>
     </header>
   );
 }
-
-// TODO: implementar troca real de idioma (i18n)
-// Atualmente apenas visual (PT | EN)

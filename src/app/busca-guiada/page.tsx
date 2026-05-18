@@ -8,62 +8,71 @@ export default function GuidedSearchPage() {
 
   return (
     <section className="page-section">
-      <div className="container">
-        <div className="hero">
-          <span className="tag">Busca Guiada</span>
-          <h1>Encontre um algoritmo pelo tipo de problema</h1>
+      <div className="container guided-page">
+        <div className="page-hero">
+          <span className="eyebrow">Busca Guiada</span>
+
+          <h1>Encontre o algoritmo certo pelo contexto do problema.</h1>
+
           <p>
-            Comece escolhendo uma área de interesse. Esta versão inicial prepara
-            o fluxo para recomendações mais detalhadas no futuro.
+            Use esta visão orientada por categoria para sair de uma pergunta de
+            negócio ou pesquisa e chegar rapidamente aos algoritmos mais
+            relevantes da biblioteca.
           </p>
         </div>
 
-        <div className="grid">
-          {categories.map((category) => {
-            const relatedAlgorithms = algorithms.filter(
-              (algorithm) => algorithm.category === category
-            );
+        <div className="guided-layout">
+          <aside className="guided-aside">
+            <span className="panel-kicker">Como usar</span>
 
-            return (
-              <article key={category} className="card">
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "14px",
-                  }}
-                >
-                  <span className="tag">{category}</span>
+            <h2>Escolha uma trilha</h2>
 
-                  <h2 style={{ margin: 0, fontSize: "24px" }}>
-                    {category}
-                  </h2>
+            <p>
+              Cada bloco representa uma área de aplicação. A próxima evolução
+              pode transformar estas trilhas em perguntas dinâmicas.
+            </p>
 
-                  <p className="muted" style={{ margin: 0, lineHeight: 1.6 }}>
-                    {relatedAlgorithms.length} algoritmo(s) disponível(is)
-                    nesta categoria.
-                  </p>
+            <Link href="/algoritmos" className="button-link">
+              Ver biblioteca completa
+            </Link>
+          </aside>
 
-                  <ul
-                    style={{
-                      margin: 0,
-                      paddingLeft: "18px",
-                      color: "var(--text-soft)",
-                      lineHeight: 1.7,
-                    }}
-                  >
+          <div className="guided-grid">
+            {categories.map((category, index) => {
+              const relatedAlgorithms = algorithms.filter(
+                (algorithm) => algorithm.category === category
+              );
+
+              return (
+                <article key={category} className="guided-card">
+                  <div className="guided-card-index">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
+
+                  <div>
+                    <span className="tag">{category}</span>
+
+                    <h2>{category}</h2>
+
+                    <p>
+                      {relatedAlgorithms.length} algoritmo(s) disponível(is)
+                      nesta trilha.
+                    </p>
+                  </div>
+
+                  <ul>
                     {relatedAlgorithms.slice(0, 3).map((algorithm) => (
                       <li key={algorithm.id}>{algorithm.name}</li>
                     ))}
                   </ul>
 
-                  <Link href="/algoritmos" className="button-link">
-                    Explorar algoritmos
+                  <Link href="/algoritmos" className="secondary-button">
+                    Explorar trilha
                   </Link>
-                </div>
-              </article>
-            );
-          })}
+                </article>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

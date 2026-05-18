@@ -122,11 +122,9 @@ export function AlgorithmsExplorer() {
 
   if (!loaded) {
     return (
-      <section className="page-section">
-        <div className="container">
-          <div className="card">Carregando biblioteca de algoritmos...</div>
-        </div>
-      </section>
+      <div className="algorithm-loading card">
+        Carregando biblioteca de algoritmos...
+      </div>
     );
   }
 
@@ -135,7 +133,9 @@ export function AlgorithmsExplorer() {
       <div className="container algorithms-page">
         <div className="hero algorithms-hero">
           <span className="eyebrow">Biblioteca</span>
+
           <h1>Explore algoritmos quânticos</h1>
+
           <p>
             Pesquise, filtre e compare algoritmos quânticos para entender onde
             cada abordagem se encaixa melhor.
@@ -145,6 +145,7 @@ export function AlgorithmsExplorer() {
         <div className="algorithms-toolbar">
           <label className="search-field">
             <span>Buscar algoritmo</span>
+
             <input
               type="search"
               value={search}
@@ -155,6 +156,7 @@ export function AlgorithmsExplorer() {
 
           <div className="result-summary">
             <strong>{filteredAlgorithms.length}</strong>
+
             <span>
               {filteredAlgorithms.length === 1
                 ? "algoritmo encontrado"
@@ -167,6 +169,7 @@ export function AlgorithmsExplorer() {
           <div className="comparison-tray">
             <div>
               <strong>{comparisonIds.length} selecionado(s)</strong>
+
               <span>
                 Selecione até {MAX_COMPARISON} algoritmos para comparar.
               </span>
@@ -206,6 +209,7 @@ export function AlgorithmsExplorer() {
             {filteredAlgorithms.length === 0 ? (
               <div className="empty-state card">
                 <h2>Nenhum algoritmo encontrado</h2>
+
                 <p className="muted">
                   Ajuste a busca ou remova filtros para ampliar os resultados.
                 </p>
