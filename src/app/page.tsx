@@ -13,7 +13,6 @@ export default function HomePage() {
             intuitiva.
           </p>
         </div>
-
         <div className="grid">
           {algorithms.map((algorithm) => (
             <AlgorithmCard key={algorithm.id} algorithm={algorithm} />
