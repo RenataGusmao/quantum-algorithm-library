@@ -1,13 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Algorithm } from "@/types/algorithm";
 import { useAlgorithms } from "@/lib/useAlgorithms";
 import { AlgorithmCard } from "./AlgorithmCard";
 import { AlgorithmFilters } from "./AlgorithmFilters";
 
-const ALL = "Todos";
+const ALL = "__all__";
 const MAX_COMPARISON = 3;
 
 function uniqueSorted(values: string[]) {
@@ -43,6 +44,7 @@ function matchesSearch(algorithm: Algorithm, query: string) {
 }
 
 export function AlgorithmsExplorer() {
+  const t = useTranslations("Algorithms");
   const { algorithms, loaded } = useAlgorithms();
 
   const [search, setSearch] = useState("");
@@ -121,36 +123,27 @@ export function AlgorithmsExplorer() {
       : "/comparar";
 
   if (!loaded) {
-    return (
-      <div className="algorithm-loading card">
-        Carregando biblioteca de algoritmos...
-      </div>
-    );
+    return <div className="algorithm-loading card">{t("loading")}</div>;
   }
 
   return (
     <section className="page-section">
       <div className="container algorithms-page">
         <div className="hero algorithms-hero">
-          <span className="eyebrow">Biblioteca</span>
-
-          <h1>Explore algoritmos quânticos</h1>
-
-          <p>
-            Pesquise, filtre e compare algoritmos quânticos para entender onde
-            cada abordagem se encaixa melhor.
-          </p>
+          <span className="eyebrow">{t("eyebrow")}</span>
+          <h1>{t("title")}</h1>
+          <p>{t("description")}</p>
         </div>
 
         <div className="algorithms-toolbar">
           <label className="search-field">
-            <span>Buscar algoritmo</span>
+            <span>{t("searchLabel")}</span>
 
             <input
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Busque por nome, aplicação, tag ou descrição"
+              placeholder={t("searchPlaceholder")}
             />
           </label>
 
@@ -159,8 +152,8 @@ export function AlgorithmsExplorer() {
 
             <span>
               {filteredAlgorithms.length === 1
-                ? "algoritmo encontrado"
-                : "algoritmos encontrados"}
+                ? t("resultSingular")
+                : t("resultPlural")}
             </span>
           </div>
         </div>
@@ -168,11 +161,8 @@ export function AlgorithmsExplorer() {
         {comparisonIds.length > 0 && (
           <div className="comparison-tray">
             <div>
-              <strong>{comparisonIds.length} selecionado(s)</strong>
-
-              <span>
-                Selecione até {MAX_COMPARISON} algoritmos para comparar.
-              </span>
+              <strong>{t("selected", { count: comparisonIds.length })}</strong>
+              <span>{t("selectionLimit", { max: MAX_COMPARISON })}</span>
             </div>
 
             <div>
@@ -181,11 +171,11 @@ export function AlgorithmsExplorer() {
                 className="secondary-button"
                 onClick={() => setComparisonIds([])}
               >
-                Limpar seleção
+                {t("clearSelection")}
               </button>
 
               <Link href={comparisonHref} className="button-link">
-                Comparar agora
+                {t("compareNow")}
               </Link>
             </div>
           </div>
@@ -193,6 +183,7 @@ export function AlgorithmsExplorer() {
 
         <div className="algorithms-layout">
           <AlgorithmFilters
+            allValue={ALL}
             categories={categories}
             complexities={complexities}
             applications={applications}
@@ -208,18 +199,16 @@ export function AlgorithmsExplorer() {
           <div className="algorithms-content">
             {filteredAlgorithms.length === 0 ? (
               <div className="empty-state card">
-                <h2>Nenhum algoritmo encontrado</h2>
+                <h2>{t("emptyTitle")}</h2>
 
-                <p className="muted">
-                  Ajuste a busca ou remova filtros para ampliar os resultados.
-                </p>
+                <p className="muted">{t("emptyDescription")}</p>
 
                 <button
                   type="button"
                   className="button-link"
                   onClick={clearFilters}
                 >
-                  Limpar filtros
+                  {t("clearFilters")}
                 </button>
               </div>
             ) : (

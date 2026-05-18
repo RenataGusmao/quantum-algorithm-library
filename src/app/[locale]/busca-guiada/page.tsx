@@ -1,7 +1,9 @@
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { algorithms } from "@/data/algorithms";
 
-export default function GuidedSearchPage() {
+export default async function GuidedSearchPage() {
+  const t = await getTranslations("GuidedSearch");
   const categories = Array.from(
     new Set(algorithms.map((algorithm) => algorithm.category))
   );
@@ -10,30 +12,23 @@ export default function GuidedSearchPage() {
     <section className="page-section">
       <div className="container guided-page">
         <div className="page-hero">
-          <span className="eyebrow">Busca Guiada</span>
+          <span className="eyebrow">{t("eyebrow")}</span>
 
-          <h1>Encontre o algoritmo certo pelo contexto do problema.</h1>
+          <h1>{t("title")}</h1>
 
-          <p>
-            Use esta visão orientada por categoria para sair de uma pergunta de
-            negócio ou pesquisa e chegar rapidamente aos algoritmos mais
-            relevantes da biblioteca.
-          </p>
+          <p>{t("description")}</p>
         </div>
 
         <div className="guided-layout">
           <aside className="guided-aside">
-            <span className="panel-kicker">Como usar</span>
+            <span className="panel-kicker">{t("howToKicker")}</span>
 
-            <h2>Escolha uma trilha</h2>
+            <h2>{t("howToTitle")}</h2>
 
-            <p>
-              Cada bloco representa uma área de aplicação. A próxima evolução
-              pode transformar estas trilhas em perguntas dinâmicas.
-            </p>
+            <p>{t("howToDescription")}</p>
 
             <Link href="/algoritmos" className="button-link">
-              Ver biblioteca completa
+              {t("viewLibrary")}
             </Link>
           </aside>
 
@@ -54,10 +49,7 @@ export default function GuidedSearchPage() {
 
                     <h2>{category}</h2>
 
-                    <p>
-                      {relatedAlgorithms.length} algoritmo(s) disponível(is)
-                      nesta trilha.
-                    </p>
+                    <p>{t("available", { count: relatedAlgorithms.length })}</p>
                   </div>
 
                   <ul>
@@ -67,7 +59,7 @@ export default function GuidedSearchPage() {
                   </ul>
 
                   <Link href="/algoritmos" className="secondary-button">
-                    Explorar trilha
+                    {t("exploreTrack")}
                   </Link>
                 </article>
               );

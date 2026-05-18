@@ -1,4 +1,7 @@
-import Link from "next/link";
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Algorithm } from "@/types/algorithm";
 
 interface AlgorithmCardProps {
@@ -14,6 +17,7 @@ export function AlgorithmCard({
   isComparisonDisabled = false,
   onToggleComparison,
 }: AlgorithmCardProps) {
+  const t = useTranslations("AlgorithmCard");
   const visibleTags = algorithm.tags?.slice(0, 4) ?? [];
   const hiddenTagsCount = Math.max(
     (algorithm.tags?.length ?? 0) - visibleTags.length,
@@ -29,7 +33,7 @@ export function AlgorithmCard({
         </div>
 
         <span className="algorithm-meta-pill">
-          {algorithm.complexity ?? "Complexidade não informada"}
+          {algorithm.complexity ?? t("unknownComplexity")}
         </span>
       </div>
 
@@ -38,7 +42,7 @@ export function AlgorithmCard({
       </p>
 
       <div className="algorithm-card-section">
-        <strong>Aplicações principais</strong>
+        <strong>{t("mainApplications")}</strong>
 
         <ul>
           {algorithm.applications.slice(0, 3).map((application) => (
@@ -57,7 +61,7 @@ export function AlgorithmCard({
 
       <div className="algorithm-card-actions">
         <Link href={`/algoritmos/${algorithm.slug}`} className="button-link">
-          Ver detalhes
+          {t("details")}
         </Link>
 
         {onToggleComparison && (
@@ -67,7 +71,7 @@ export function AlgorithmCard({
             disabled={isComparisonDisabled && !isSelectedForComparison}
             onClick={() => onToggleComparison(algorithm.id)}
           >
-            {isSelectedForComparison ? "Remover" : "Comparar"}
+            {isSelectedForComparison ? t("remove") : t("compare")}
           </button>
         )}
       </div>

@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { algorithms } from "@/data/algorithms";
 import { Algorithm } from "@/types/algorithm";
 
@@ -16,16 +17,19 @@ export default function ComparePage() {
 }
 
 function CompareFallback() {
+  const t = useTranslations("Compare");
+
   return (
     <section className="page-section">
       <div className="container">
-        <div className="card">Carregando comparação...</div>
+        <div className="card">{t("loading")}</div>
       </div>
     </section>
   );
 }
 
 function CompareContent() {
+  const t = useTranslations("Compare");
   const searchParams = useSearchParams();
 
   const initialIds =
@@ -60,11 +64,8 @@ function CompareContent() {
     <section className="page-section">
       <div className="container">
         <div className="hero">
-          <h1>Comparar Algoritmos</h1>
-          <p>
-            Selecione até {MAX_COMPARE} algoritmos para comparar suas principais
-            características lado a lado.
-          </p>
+          <h1>{t("title")}</h1>
+          <p>{t("description", { max: MAX_COMPARE })}</p>
         </div>
 
         <div className="grid" style={{ marginBottom: "32px" }}>
@@ -97,7 +98,7 @@ function CompareContent() {
                     disabled={disabled}
                     onClick={() => handleSelect(algorithm.id)}
                   >
-                    {selected ? "Selecionado" : "Selecionar"}
+                    {selected ? t("selected") : t("select")}
                   </button>
                 </div>
               </article>
@@ -108,7 +109,7 @@ function CompareContent() {
         {selectedAlgorithms.length < 2 ? (
           <div className="card">
             <p className="muted" style={{ margin: 0 }}>
-              Selecione pelo menos 2 algoritmos para iniciar a comparação.
+              {t("empty")}
             </p>
           </div>
         ) : (
@@ -117,8 +118,9 @@ function CompareContent() {
               <thead>
                 <tr>
                   <th style={{ textAlign: "left", padding: "12px" }}>
-                    Critério
+                    {t("criterion")}
                   </th>
+
                   {selectedAlgorithms.map((algorithm) => (
                     <th
                       key={algorithm.id}
@@ -132,45 +134,48 @@ function CompareContent() {
 
               <tbody>
                 <CompareRow
-                  label="Categoria"
+                  label={t("category")}
                   values={selectedAlgorithms.map(
                     (algorithm) => algorithm.category
                   )}
                 />
 
                 <CompareRow
-                  label="Complexidade"
+                  label={t("complexity")}
                   values={selectedAlgorithms.map(
-                    (algorithm) => algorithm.complexity ?? "Não informado"
+                    (algorithm) => algorithm.complexity ?? t("notInformed")
                   )}
                 />
 
                 <CompareRow
-                  label="Descrição"
+                  label={t("descriptionLabel")}
                   values={selectedAlgorithms.map(
                     (algorithm) => algorithm.shortDescription
                   )}
                 />
 
                 <CompareListRow
-                  label="Aplicações"
+                  label={t("applications")}
                   values={selectedAlgorithms.map(
                     (algorithm) => algorithm.applications
                   )}
+                  emptyText={t("notInformed")}
                 />
 
                 <CompareListRow
-                  label="Vantagens"
+                  label={t("advantages")}
                   values={selectedAlgorithms.map(
                     (algorithm) => algorithm.advantages ?? []
                   )}
+                  emptyText={t("notInformed")}
                 />
 
                 <CompareListRow
-                  label="Limitações"
+                  label={t("limitations")}
                   values={selectedAlgorithms.map(
                     (algorithm) => algorithm.limitations ?? []
                   )}
+                  emptyText={t("notInformed")}
                 />
               </tbody>
             </table>
@@ -190,6 +195,7 @@ function CompareRow({ label, values }: CompareRowProps) {
   return (
     <tr>
       <td style={{ padding: "12px", fontWeight: 700 }}>{label}</td>
+
       {values.map((value, index) => (
         <td key={index} style={{ padding: "12px", color: "var(--text-soft)" }}>
           {value}
@@ -202,9 +208,10 @@ function CompareRow({ label, values }: CompareRowProps) {
 interface CompareListRowProps {
   label: string;
   values: string[][];
+  emptyText: string;
 }
 
-function CompareListRow({ label, values }: CompareListRowProps) {
+function CompareListRow({ label, values, emptyText }: CompareListRowProps) {
   return (
     <tr>
       <td style={{ padding: "12px", fontWeight: 700, verticalAlign: "top" }}>
@@ -222,7 +229,7 @@ function CompareListRow({ label, values }: CompareListRowProps) {
               ))}
             </ul>
           ) : (
-            <span className="muted">Não informado</span>
+            <span className="muted">{emptyText}</span>
           )}
         </td>
       ))}

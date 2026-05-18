@@ -1,16 +1,23 @@
+"use client";
+
 import Image from "next/image";
-import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 
 const navItems = [
-  { href: "/", label: "Início" },
-  { href: "/algoritmos", label: "Algoritmos" },
-  { href: "/comparar", label: "Comparar" },
-  { href: "/busca-guiada", label: "Busca Guiada" },
-  { href: "/sobre", label: "Sobre" },
-  { href: "/admin", label: "Admin" },
-];
+  { href: "/", key: "home" },
+  { href: "/algoritmos", key: "algorithms" },
+  { href: "/comparar", key: "compare" },
+  { href: "/busca-guiada", key: "guidedSearch" },
+  { href: "/sobre", key: "about" },
+  { href: "/admin", key: "admin" },
+] as const;
 
 export function Header() {
+  const t = useTranslations("Header");
+  const locale = useLocale();
+  const pathname = usePathname();
+
   return (
     <header className="topbar">
       <div className="container topbar-inner">
@@ -32,18 +39,32 @@ export function Header() {
         </Link>
 
         <div className="topbar-actions">
-          <nav className="topbar-nav" aria-label="Navegação principal">
+          <nav className="topbar-nav" aria-label={t("navLabel")}>
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} className="header-link">
-                {item.label}
+                {t(item.key)}
               </Link>
             ))}
           </nav>
 
-          <div className="language-switch" aria-label="Idioma atual">
-            <span>PT</span>
+          <div className="language-switch" aria-label={t("languageLabel")}>
+            <Link
+              href={pathname}
+              locale="pt"
+              className={locale === "pt" ? "language-active" : undefined}
+            >
+              PT
+            </Link>
+
             <span>|</span>
-            <span>EN</span>
+
+            <Link
+              href={pathname}
+              locale="en"
+              className={locale === "en" ? "language-active" : undefined}
+            >
+              EN
+            </Link>
           </div>
         </div>
       </div>

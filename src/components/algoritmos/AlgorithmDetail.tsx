@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { useAlgorithms } from "@/lib/useAlgorithms";
 import { AlgorithmCard } from "./AlgorithmCard";
 
@@ -9,6 +10,7 @@ interface AlgorithmDetailProps {
 }
 
 export function AlgorithmDetail({ slug }: AlgorithmDetailProps) {
+  const t = useTranslations("AlgorithmDetail");
   const { algorithms, loaded } = useAlgorithms();
 
   if (!loaded) {
@@ -28,13 +30,12 @@ export function AlgorithmDetail({ slug }: AlgorithmDetailProps) {
       <section className="page-section">
         <div className="container">
           <div className="card empty-state">
-            <h1>Algoritmo não encontrado</h1>
-            <p className="muted">
-              O algoritmo solicitado não está disponível na biblioteca.
-            </p>
+            <h1>{t("notFoundTitle")}</h1>
+
+            <p className="muted">{t("notFoundDescription")}</p>
 
             <Link href="/algoritmos" className="button-link">
-              Voltar para algoritmos
+              {t("backToAlgorithms")}
             </Link>
           </div>
         </div>
@@ -52,7 +53,7 @@ export function AlgorithmDetail({ slug }: AlgorithmDetailProps) {
     <section className="page-section">
       <div className="container algorithm-detail-page">
         <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link href="/algoritmos">Algoritmos</Link>
+          <Link href="/algoritmos">{t("breadcrumb")}</Link>
           <span>/</span>
           <span>{algorithm.name}</span>
         </nav>
@@ -69,40 +70,65 @@ export function AlgorithmDetail({ slug }: AlgorithmDetailProps) {
               href={`/comparar?ids=${algorithm.id}`}
               className="secondary-button"
             >
-              Preparar comparação
+              {t("prepareComparison")}
             </Link>
 
             <Link href="/algoritmos" className="button-link">
-              Voltar para biblioteca
+              {t("backToLibrary")}
             </Link>
           </div>
         </div>
 
         <div className="detail-summary-grid">
           <SummaryItem
-            label="Complexidade"
-            value={algorithm.complexity ?? "Não informado"}
+            label={t("complexity")}
+            value={algorithm.complexity ?? t("notInformed")}
           />
+
           <SummaryItem
-            label="Aplicações"
-            value={`${algorithm.applications.length} áreas`}
+            label={t("applications")}
+            value={t("applicationsCount", {
+              count: algorithm.applications.length,
+            })}
           />
+
           <SummaryItem
-            label="Características"
-            value={`${algorithm.characteristics.length} pontos`}
+            label={t("characteristics")}
+            value={t("characteristicsCount", {
+              count: algorithm.characteristics.length,
+            })}
           />
         </div>
 
         <div className="detail-grid">
-          <DetailList title="Aplicações" items={algorithm.applications} />
-          <DetailList title="Características" items={algorithm.characteristics} />
-          <DetailList title="Vantagens" items={algorithm.advantages ?? []} />
-          <DetailList title="Limitações" items={algorithm.limitations ?? []} />
+          <DetailList
+            title={t("applications")}
+            items={algorithm.applications}
+            emptyText={t("missingInfo")}
+          />
+
+          <DetailList
+            title={t("characteristics")}
+            items={algorithm.characteristics}
+            emptyText={t("missingInfo")}
+          />
+
+          <DetailList
+            title={t("advantages")}
+            items={algorithm.advantages ?? []}
+            emptyText={t("missingInfo")}
+          />
+
+          <DetailList
+            title={t("limitations")}
+            items={algorithm.limitations ?? []}
+            emptyText={t("missingInfo")}
+          />
         </div>
 
         {algorithm.tags && algorithm.tags.length > 0 && (
           <div className="card detail-tags-card">
-            <h2>Tags</h2>
+            <h2>{t("tags")}</h2>
 
             <div className="algorithm-tags">
               {algorithm.tags.map((tag) => (
@@ -115,8 +141,8 @@ export function AlgorithmDetail({ slug }: AlgorithmDetailProps) {
         {relatedAlgorithms.length > 0 && (
           <section className="related-section">
             <div>
-              <span className="eyebrow">Relacionados</span>
-              <h2>Outros algoritmos da categoria</h2>
+              <span className="eyebrow">{t("relatedEyebrow")}</span>
+              <h2>{t("relatedTitle")}</h2>
             </div>
 
             <div className="grid">
@@ -148,9 +174,10 @@ function SummaryItem({ label, value }: SummaryItemProps) {
 interface DetailListProps {
   title: string;
   items: string[];
+  emptyText: string;
 }
 
-function DetailList({ title, items }: DetailListProps) {
+function DetailList({ title, items, emptyText }: DetailListProps) {
   return (
     <section className="card list-block">
       <h2>{title}</h2>
@@ -162,7 +189,7 @@ function DetailList({ title, items }: DetailListProps) {
           ))}
         </ul>
       ) : (
-        <p className="muted">Informação ainda não cadastrada.</p>
+        <p className="muted">{emptyText}</p>
       )}
     </section>
   );

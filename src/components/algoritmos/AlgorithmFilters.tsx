@@ -1,6 +1,9 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 interface AlgorithmFiltersProps {
+  allValue: string;
   categories: string[];
   complexities: string[];
   applications: string[];
@@ -13,9 +16,8 @@ interface AlgorithmFiltersProps {
   onClear: () => void;
 }
 
-const ALL = "Todos";
-
 export function AlgorithmFilters({
+  allValue,
   categories,
   complexities,
   applications,
@@ -27,43 +29,48 @@ export function AlgorithmFilters({
   onApplicationChange,
   onClear,
 }: AlgorithmFiltersProps) {
+  const t = useTranslations("Filters");
+
   const hasActiveFilters =
-    selectedCategory !== ALL ||
-    selectedComplexity !== ALL ||
-    selectedApplication !== ALL;
+    selectedCategory !== allValue ||
+    selectedComplexity !== allValue ||
+    selectedApplication !== allValue;
 
   return (
     <aside className="algorithm-filter-panel">
       <div className="algorithm-filter-header">
         <div>
-          <span className="eyebrow">Filtros</span>
-          <h2>Refinar biblioteca</h2>
+          <span className="eyebrow">{t("eyebrow")}</span>
+          <h2>{t("title")}</h2>
         </div>
 
         {hasActiveFilters && (
           <button type="button" className="text-button" onClick={onClear}>
-            Limpar
+            {t("clear")}
           </button>
         )}
       </div>
 
       <FilterGroup
-        title="Categoria"
-        options={[ALL, ...categories]}
+        title={t("category")}
+        options={[allValue, ...categories]}
+        optionLabels={{ [allValue]: t("all") }}
         selected={selectedCategory}
         onChange={onCategoryChange}
       />
 
       <FilterGroup
-        title="Complexidade"
-        options={[ALL, ...complexities]}
+        title={t("complexity")}
+        options={[allValue, ...complexities]}
+        optionLabels={{ [allValue]: t("all") }}
         selected={selectedComplexity}
         onChange={onComplexityChange}
       />
 
       <FilterGroup
-        title="Aplicação"
-        options={[ALL, ...applications]}
+        title={t("application")}
+        options={[allValue, ...applications]}
+        optionLabels={{ [allValue]: t("all") }}
         selected={selectedApplication}
         onChange={onApplicationChange}
       />
@@ -74,11 +81,18 @@ export function AlgorithmFilters({
 interface FilterGroupProps {
   title: string;
   options: string[];
+  optionLabels?: Record<string, string>;
   selected: string;
   onChange: (value: string) => void;
 }
 
-function FilterGroup({ title, options, selected, onChange }: FilterGroupProps) {
+function FilterGroup({
+  title,
+  options,
+  optionLabels,
+  selected,
+  onChange,
+}: FilterGroupProps) {
   return (
     <fieldset className="filter-group">
       <legend>{title}</legend>
@@ -94,7 +108,7 @@ function FilterGroup({ title, options, selected, onChange }: FilterGroupProps) {
               onChange={(event) => onChange(event.target.value)}
             />
 
-            <span>{option}</span>
+            <span>{optionLabels?.[option] ?? option}</span>
           </label>
         ))}
       </div>
