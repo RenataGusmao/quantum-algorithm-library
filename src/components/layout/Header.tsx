@@ -29,13 +29,15 @@ export function Header() {
           <Image
             src="/brand/accenture_logo.png"
             alt="Accenture"
-            width={162}
-            height={42}
+            width={132}
+            height={34}
             priority
             className="header-logo"
           />
 
-          <span>Quantum Algorithm Library</span>
+          <span className="header-product-name">
+            Quantum Algorithm Library
+          </span>
         </Link>
 
         <div className="topbar-actions">

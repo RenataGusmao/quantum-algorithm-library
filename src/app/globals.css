@@ -215,16 +215,25 @@ main {
 
 .header-brand {
   display: flex;
-  align-items: center;
-  gap: 18px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
   color: var(--text-inverse);
-  font-size: 18px;
   font-weight: 800;
 }
 
 .header-logo {
-  width: 148px;
+  width: 132px;
   height: auto;
+}
+
+.header-product-name {
+  display: block;
+  color: #ffffff;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0;
 }
 
 .topbar-actions {
