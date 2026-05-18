@@ -1,23 +1,54 @@
 "use client";
-import { useState, useEffect } from "react";
+
+import { useSyncExternalStore } from "react";
 import { Algorithm } from "@/types/algorithm";
 import { algorithms as seedAlgorithms } from "@/data/algorithms";
 
 const STORAGE_KEY = "admin_algorithms";
+const CHANGE_EVENT = "admin_algorithms_change";
+
+function readAlgorithms(): Algorithm[] {
+  if (typeof window === "undefined") {
+    return seedAlgorithms;
+  }
+
+  const stored = window.localStorage.getItem(STORAGE_KEY);
+
+  if (!stored) {
+    return seedAlgorithms;
+  }
+
+  try {
+    return JSON.parse(stored) as Algorithm[];
+  } catch {
+    return seedAlgorithms;
+  }
+}
+
+function subscribe(onStoreChange: () => void) {
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(CHANGE_EVENT, onStoreChange);
+
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(CHANGE_EVENT, onStoreChange);
+  };
+}
+
+function persistAlgorithms(data: Algorithm[]) {
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  window.dispatchEvent(new Event(CHANGE_EVENT));
+}
 
 export function useAlgorithms() {
-  const [algorithms, setAlgorithms] = useState<Algorithm[]>([]);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    setAlgorithms(stored ? JSON.parse(stored) : seedAlgorithms);
-    setLoaded(true);
-  }, []);
+  const algorithms = useSyncExternalStore(
+    subscribe,
+    readAlgorithms,
+    () => seedAlgorithms
+  );
 
   const save = (data: Algorithm[]) => {
-    setAlgorithms(data);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    persistAlgorithms(data);
   };
 
   const addAlgorithm = (algorithm: Omit<Algorithm, "id">) => {
@@ -34,5 +65,11 @@ export function useAlgorithms() {
     save(algorithms.filter((a) => a.id !== id));
   };
 
-  return { algorithms, loaded, addAlgorithm, updateAlgorithm, deleteAlgorithm };
+  return {
+    algorithms,
+    loaded: true,
+    addAlgorithm,
+    updateAlgorithm,
+    deleteAlgorithm,
+  };
 }
