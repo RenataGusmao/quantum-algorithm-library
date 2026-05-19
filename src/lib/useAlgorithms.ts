@@ -7,6 +7,9 @@ import { algorithms as seedAlgorithms } from "@/data/algorithms";
 const STORAGE_KEY = "admin_algorithms";
 const CHANGE_EVENT = "admin_algorithms_change";
 
+let cachedStorageValue: string | null = null;
+let cachedAlgorithms: Algorithm[] = seedAlgorithms;
+
 function readAlgorithms(): Algorithm[] {
   if (typeof window === "undefined") {
     return seedAlgorithms;
@@ -15,12 +18,22 @@ function readAlgorithms(): Algorithm[] {
   const stored = window.localStorage.getItem(STORAGE_KEY);
 
   if (!stored) {
+    cachedStorageValue = null;
+    cachedAlgorithms = seedAlgorithms;
     return seedAlgorithms;
   }
 
+  if (stored === cachedStorageValue) {
+    return cachedAlgorithms;
+  }
+
   try {
-    return JSON.parse(stored) as Algorithm[];
+    cachedStorageValue = stored;
+    cachedAlgorithms = JSON.parse(stored) as Algorithm[];
+    return cachedAlgorithms;
   } catch {
+    cachedStorageValue = null;
+    cachedAlgorithms = seedAlgorithms;
     return seedAlgorithms;
   }
 }
@@ -36,7 +49,9 @@ function subscribe(onStoreChange: () => void) {
 }
 
 function persistAlgorithms(data: Algorithm[]) {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  cachedAlgorithms = data;
+  cachedStorageValue = JSON.stringify(data);
+  window.localStorage.setItem(STORAGE_KEY, cachedStorageValue);
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
