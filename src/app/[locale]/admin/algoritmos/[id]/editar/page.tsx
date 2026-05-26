@@ -1,6 +1,8 @@
 "use client";
+
 import { use } from "react";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { useAlgorithms } from "@/lib/useAlgorithms";
 import { AlgorithmForm } from "@/components/admin/AlgorithmForm";
 
@@ -9,6 +11,7 @@ interface EditAlgorithmPageProps {
 }
 
 export default function EditAlgorithmPage({ params }: EditAlgorithmPageProps) {
+  const t = useTranslations("AdminEdit");
   const { id } = use(params);
   const router = useRouter();
   const { algorithms, loaded, updateAlgorithm } = useAlgorithms();
@@ -17,9 +20,10 @@ export default function EditAlgorithmPage({ params }: EditAlgorithmPageProps) {
     return (
       <div>
         <div className="admin-page-header">
-          <h1>Editar Algoritmo</h1>
+          <h1>{t("editTitle")}</h1>
         </div>
-        <p className="muted">Carregando...</p>
+
+        <p className="muted">{t("loading")}</p>
       </div>
     );
   }
@@ -30,17 +34,19 @@ export default function EditAlgorithmPage({ params }: EditAlgorithmPageProps) {
     return (
       <div>
         <div className="admin-page-header">
-          <h1>Editar Algoritmo</h1>
+          <h1>{t("editTitle")}</h1>
         </div>
+
         <div className="card" style={{ padding: "40px", textAlign: "center" }}>
           <p className="muted" style={{ margin: "0 0 16px 0" }}>
-            Algoritmo não encontrado.
+            {t("notFound")}
           </p>
+
           <button
             className="btn btn-ghost"
             onClick={() => router.push("/admin/algoritmos")}
           >
-            Voltar para a lista
+            {t("backToList")}
           </button>
         </div>
       </div>
@@ -50,15 +56,15 @@ export default function EditAlgorithmPage({ params }: EditAlgorithmPageProps) {
   return (
     <div>
       <div className="admin-page-header">
-        <h1>Editar: {algorithm.name}</h1>
+        <h1>{t("editNamedTitle", { name: algorithm.name })}</h1>
       </div>
 
       <AlgorithmForm
         initial={algorithm}
-        submitLabel="Salvar alterações"
+        submitLabel={t("saveSubmit")}
         onCancel={() => router.push("/admin/algoritmos")}
-        onSubmit={(data) => {
-          updateAlgorithm(id, data);
+        onSubmit={async (data) => {
+          await updateAlgorithm(id, data);
           router.push("/admin/algoritmos");
         }}
       />

@@ -1,6 +1,6 @@
-import { AlgorithmCard } from "@/components/algoritmos/AlgorithmCard";
-import { algorithms } from "@/data/algorithms";
+import { redirect } from "next/navigation";
 
+<<<<<<< HEAD
 export default function HomePage() {
   return (
     <section className="page-section">
@@ -21,4 +21,8 @@ export default function HomePage() {
       </div>
     </section>
   );
+=======
+export default function RootPage() {
+  redirect("/pt");
+>>>>>>> 3b728318e6386ea0de4cb7b31ccb8c9f3c8a909f
 }

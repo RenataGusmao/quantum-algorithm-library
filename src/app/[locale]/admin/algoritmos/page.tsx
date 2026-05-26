@@ -5,9 +5,9 @@ import { useAlgorithms } from "@/lib/useAlgorithms";
 export default function AdminAlgorithmsPage() {
   const { algorithms, loaded, deleteAlgorithm } = useAlgorithms();
 
-  const handleDelete = (id: string, name: string) => {
+  const handleDelete = async (id: string, name: string) => {
     if (confirm(`Deseja excluir o algoritmo "${name}"? Esta ação não pode ser desfeita.`)) {
-      deleteAlgorithm(id);
+      await deleteAlgorithm(id);
     }
   };
 
