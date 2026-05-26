@@ -1,12 +1,15 @@
-import { getTranslations } from "next-intl/server";
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { AlgorithmCard } from "@/components/algoritmos/AlgorithmCard";
-import { algorithms } from "@/data/algorithms";
+import { useAlgorithms } from "@/lib/useAlgorithms";
 
-const featuredAlgorithms = algorithms.slice(0, 3);
+export default function HomePage() {
+  const t = useTranslations("Home");
+  const { algorithms, loaded } = useAlgorithms();
 
-export default async function HomePage() {
-  const t = await getTranslations("Home");
+  const featuredAlgorithms = algorithms.slice(0, 3);
 
   return (
     <>
@@ -32,7 +35,7 @@ export default async function HomePage() {
 
           <div className="hero-panel" aria-label={t("panelKicker")}>
             <span className="panel-kicker">{t("panelKicker")}</span>
-            <strong>{algorithms.length}</strong>
+            <strong>{loaded ? algorithms.length : "..."}</strong>
             <span>{t("panelDescription")}</span>
           </div>
         </div>
