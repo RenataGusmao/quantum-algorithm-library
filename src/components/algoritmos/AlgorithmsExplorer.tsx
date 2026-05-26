@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Algorithm } from "@/types/algorithm";
@@ -27,7 +27,6 @@ function normalize(value: string) {
 
 function matchesSearch(algorithm: Algorithm, query: string) {
   if (!query.trim()) return true;
-
   const searchable = [
     algorithm.name,
     algorithm.category,
@@ -40,7 +39,6 @@ function matchesSearch(algorithm: Algorithm, query: string) {
   ]
     .map(normalize)
     .join(" ");
-
   return searchable.includes(normalize(query));
 }
 
@@ -55,44 +53,27 @@ export function AlgorithmsExplorer() {
   const [comparisonIds, setComparisonIds] = useState<string[]>([]);
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    setPage(1);
-  }, [search, selectedCategory, selectedComplexity, selectedApplication]);
-
   const categories = useMemo(
-    () => uniqueSorted(algorithms.map((algorithm) => algorithm.category)),
+    () => uniqueSorted(algorithms.map((a) => a.category)),
     [algorithms]
   );
 
   const complexities = useMemo(
-    () => uniqueSorted(algorithms.map((algorithm) => algorithm.complexity ?? "")),
+    () => uniqueSorted(algorithms.map((a) => a.complexity ?? "")),
     [algorithms]
   );
 
   const applications = useMemo(
-    () => uniqueSorted(algorithms.flatMap((algorithm) => algorithm.applications)),
+    () => uniqueSorted(algorithms.flatMap((a) => a.applications)),
     [algorithms]
   );
 
   const filteredAlgorithms = useMemo(() => {
     return algorithms.filter((algorithm) => {
-      const categoryMatch =
-        selectedCategory === ALL || algorithm.category === selectedCategory;
-
-      const complexityMatch =
-        selectedComplexity === ALL ||
-        algorithm.complexity === selectedComplexity;
-
-      const applicationMatch =
-        selectedApplication === ALL ||
-        algorithm.applications.includes(selectedApplication);
-
-      return (
-        matchesSearch(algorithm, search) &&
-        categoryMatch &&
-        complexityMatch &&
-        applicationMatch
-      );
+      const categoryMatch = selectedCategory === ALL || algorithm.category === selectedCategory;
+      const complexityMatch = selectedComplexity === ALL || algorithm.complexity === selectedComplexity;
+      const applicationMatch = selectedApplication === ALL || algorithm.applications.includes(selectedApplication);
+      return matchesSearch(algorithm, search) && categoryMatch && complexityMatch && applicationMatch;
     });
   }, [algorithms, search, selectedCategory, selectedComplexity, selectedApplication]);
 
@@ -104,24 +85,19 @@ export function AlgorithmsExplorer() {
     setSelectedCategory(ALL);
     setSelectedComplexity(ALL);
     setSelectedApplication(ALL);
+    setPage(1);
   };
 
   const toggleComparison = (algorithmId: string) => {
     setComparisonIds((current) => {
-      if (current.includes(algorithmId)) {
-        return current.filter((id) => id !== algorithmId);
-      }
-      if (current.length >= MAX_COMPARISON) {
-        return current;
-      }
+      if (current.includes(algorithmId)) return current.filter((id) => id !== algorithmId);
+      if (current.length >= MAX_COMPARISON) return current;
       return [...current, algorithmId];
     });
   };
 
   const comparisonHref =
-    comparisonIds.length > 0
-      ? `/comparar?ids=${comparisonIds.join(",")}`
-      : "/comparar";
+    comparisonIds.length > 0 ? `/comparar?ids=${comparisonIds.join(",")}` : "/comparar";
 
   if (!loaded) {
     return <div className="algorithm-loading card">{t("loading")}</div>;
@@ -142,18 +118,13 @@ export function AlgorithmsExplorer() {
             <input
               type="search"
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(e) => { setSearch(e.target.value); setPage(1); }}
               placeholder={t("searchPlaceholder")}
             />
           </label>
-
           <div className="result-summary">
             <strong>{filteredAlgorithms.length}</strong>
-            <span>
-              {filteredAlgorithms.length === 1
-                ? t("resultSingular")
-                : t("resultPlural")}
-            </span>
+            <span>{filteredAlgorithms.length === 1 ? t("resultSingular") : t("resultPlural")}</span>
           </div>
         </div>
 
@@ -164,11 +135,7 @@ export function AlgorithmsExplorer() {
               <span>{t("selectionLimit", { max: MAX_COMPARISON })}</span>
             </div>
             <div>
-              <button
-                type="button"
-                className="secondary-button"
-                onClick={() => setComparisonIds([])}
-              >
+              <button type="button" className="secondary-button" onClick={() => setComparisonIds([])}>
                 {t("clearSelection")}
               </button>
               <Link href={comparisonHref} className="button-link">
@@ -187,9 +154,9 @@ export function AlgorithmsExplorer() {
             selectedCategory={selectedCategory}
             selectedComplexity={selectedComplexity}
             selectedApplication={selectedApplication}
-            onCategoryChange={setSelectedCategory}
-            onComplexityChange={setSelectedComplexity}
-            onApplicationChange={setSelectedApplication}
+            onCategoryChange={(v) => { setSelectedCategory(v); setPage(1); }}
+            onComplexityChange={(v) => { setSelectedComplexity(v); setPage(1); }}
+            onApplicationChange={(v) => { setSelectedApplication(v); setPage(1); }}
             onClear={clearFilters}
           />
 
@@ -198,11 +165,7 @@ export function AlgorithmsExplorer() {
               <div className="empty-state card">
                 <h2>{t("emptyTitle")}</h2>
                 <p className="muted">{t("emptyDescription")}</p>
-                <button
-                  type="button"
-                  className="button-link"
-                  onClick={clearFilters}
-                >
+                <button type="button" className="button-link" onClick={clearFilters}>
                   {t("clearFilters")}
                 </button>
               </div>
