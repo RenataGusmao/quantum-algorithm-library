@@ -11,7 +11,7 @@
   },
   "Home": {
     "eyebrow": "Accenture Quantum",
-    "title": "Executive library of quantum algorithms.",
+    "title": "Quantum Atlas.",
     "description": "Explore, compare and understand quantum algorithms through a clear, decision-oriented experience designed to evolve.",
     "primaryAction": "Explore algorithms",
     "secondaryAction": "Start guided search",
