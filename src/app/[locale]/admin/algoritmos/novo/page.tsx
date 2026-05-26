@@ -16,14 +16,14 @@ export default function NewAlgorithmPage() {
         <h1>{t("newTitle")}</h1>
       </div>
 
-      <AlgorithmForm
-        submitLabel={t("createSubmit")}
-        onCancel={() => router.push("/admin/algoritmos")}
-        onSubmit={(data) => {
-          addAlgorithm(data);
-          router.push("/admin/algoritmos");
-        }}
-      />
+        <AlgorithmForm
+          submitLabel={t("createSubmit")}
+          onCancel={() => router.push("/admin/algoritmos")}
+          onSubmit={async (data) => {
+            await addAlgorithm(data);
+            router.push("/admin/algoritmos");
+         }}
+        />
     </div>
   );
 }

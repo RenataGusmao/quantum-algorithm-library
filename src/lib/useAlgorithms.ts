@@ -1,90 +1,141 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
-import { Algorithm } from "@/types/algorithm";
+import { useCallback, useEffect, useState } from "react";
 import { algorithms as seedAlgorithms } from "@/data/algorithms";
+import { Algorithm } from "@/types/algorithm";
 
-const STORAGE_KEY = "admin_algorithms";
-const CHANGE_EVENT = "admin_algorithms_change";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ??
+  "http://localhost:3000";
 
-let cachedStorageValue: string | null = null;
-let cachedAlgorithms: Algorithm[] = seedAlgorithms;
-
-function readAlgorithms(): Algorithm[] {
-  if (typeof window === "undefined") {
-    return seedAlgorithms;
-  }
-
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-
-  if (!stored) {
-    cachedStorageValue = null;
-    cachedAlgorithms = seedAlgorithms;
-    return seedAlgorithms;
-  }
-
-  if (stored === cachedStorageValue) {
-    return cachedAlgorithms;
-  }
-
-  try {
-    cachedStorageValue = stored;
-    cachedAlgorithms = JSON.parse(stored) as Algorithm[];
-    return cachedAlgorithms;
-  } catch {
-    cachedStorageValue = null;
-    cachedAlgorithms = seedAlgorithms;
-    return seedAlgorithms;
-  }
+interface ApiAlgorithm {
+  id: string;
+  nome: string;
+  slug: string;
+  categoria?: string | null;
+  descricaoCurta: string;
+  descricaoCompleta?: string | null;
+  complexidade?: string | null;
+  aplicacoes?: string[];
+  caracteristicas?: string[];
+  vantagens?: string[];
+  limitacoes?: string[];
+  tags?: string[];
 }
 
-function subscribe(onStoreChange: () => void) {
-  window.addEventListener("storage", onStoreChange);
-  window.addEventListener(CHANGE_EVENT, onStoreChange);
-
-  return () => {
-    window.removeEventListener("storage", onStoreChange);
-    window.removeEventListener(CHANGE_EVENT, onStoreChange);
+function fromApi(data: ApiAlgorithm): Algorithm {
+  return {
+    id: data.id,
+    name: data.nome,
+    slug: data.slug,
+    category: data.categoria ?? "Search",
+    shortDescription: data.descricaoCurta,
+    fullDescription: data.descricaoCompleta ?? data.descricaoCurta,
+    complexity: data.complexidade ?? undefined,
+    applications: data.aplicacoes ?? [],
+    characteristics: data.caracteristicas ?? [],
+    advantages: data.vantagens ?? [],
+    limitations: data.limitacoes ?? [],
+    tags: data.tags ?? [],
   };
 }
 
-function persistAlgorithms(data: Algorithm[]) {
-  cachedAlgorithms = data;
-  cachedStorageValue = JSON.stringify(data);
-  window.localStorage.setItem(STORAGE_KEY, cachedStorageValue);
-  window.dispatchEvent(new Event(CHANGE_EVENT));
+function toApi(data: Omit<Algorithm, "id"> | Partial<Algorithm>) {
+  return {
+    nome: data.name,
+    slug: data.slug,
+    categoria: data.category,
+    descricaoCurta: data.shortDescription,
+    descricaoCompleta: data.fullDescription,
+    complexidade: data.complexity,
+    aplicacoes: data.applications,
+    caracteristicas: data.characteristics,
+    vantagens: data.advantages,
+    limitacoes: data.limitations,
+    tags: data.tags,
+  };
+}
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(`${API_URL}${path}`, {
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      ...init?.headers,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Erro na API: ${response.status}`);
+  }
+
+  return response.json() as Promise<T>;
 }
 
 export function useAlgorithms() {
-  const algorithms = useSyncExternalStore(
-    subscribe,
-    readAlgorithms,
-    () => seedAlgorithms
-  );
+  const [algorithms, setAlgorithms] = useState<Algorithm[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
-  const save = (data: Algorithm[]) => {
-    persistAlgorithms(data);
+  const loadAlgorithms = useCallback(async () => {
+    try {
+      const data = await request<ApiAlgorithm[]>("/algoritmos");
+      setAlgorithms(data.map(fromApi));
+    } catch (error) {
+      console.error(error);
+      setAlgorithms(seedAlgorithms);
+    } finally {
+      setLoaded(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadAlgorithms();
+  }, [loadAlgorithms]);
+
+  const addAlgorithm = async (algorithm: Omit<Algorithm, "id">) => {
+    const created = await request<ApiAlgorithm>("/algoritmos", {
+      method: "POST",
+      body: JSON.stringify(toApi(algorithm)),
+    });
+
+    const mapped = fromApi(created);
+    setAlgorithms((current) => [...current, mapped]);
+    return mapped;
   };
 
-  const addAlgorithm = (algorithm: Omit<Algorithm, "id">) => {
-    const newAlg: Algorithm = { ...algorithm, id: Date.now().toString() };
-    save([...algorithms, newAlg]);
-    return newAlg;
+  const updateAlgorithm = async (id: string, data: Partial<Algorithm>) => {
+    const updated = await request<ApiAlgorithm>(`/algoritmos/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(toApi(data)),
+    });
+
+    const mapped = fromApi(updated);
+    setAlgorithms((current) =>
+      current.map((algorithm) => (algorithm.id === id ? mapped : algorithm))
+    );
+    return mapped;
   };
 
-  const updateAlgorithm = (id: string, data: Partial<Algorithm>) => {
-    save(algorithms.map((a) => (a.id === id ? { ...a, ...data } : a)));
-  };
+  const deleteAlgorithm = async (id: string) => {
+    const response = await fetch(`${API_URL}/algoritmos/${id}`, {
+      method: "DELETE",
+    });
 
-  const deleteAlgorithm = (id: string) => {
-    save(algorithms.filter((a) => a.id !== id));
+    if (!response.ok) {
+      throw new Error(`Erro na API: ${response.status}`);
+    }
+
+    setAlgorithms((current) =>
+      current.filter((algorithm) => algorithm.id !== id)
+    );
   };
 
   return {
     algorithms,
-    loaded: true,
+    loaded,
     addAlgorithm,
     updateAlgorithm,
     deleteAlgorithm,
+    reloadAlgorithms: loadAlgorithms,
   };
 }

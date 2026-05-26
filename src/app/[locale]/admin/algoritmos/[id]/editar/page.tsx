@@ -64,7 +64,7 @@ export default function EditAlgorithmPage({ params }: EditAlgorithmPageProps) {
         submitLabel={t("saveSubmit")}
         onCancel={() => router.push("/admin/algoritmos")}
         onSubmit={(data) => {
-          updateAlgorithm(id, data);
+          await updateAlgorithm(id, data);
           router.push("/admin/algoritmos");
         }}
       />
