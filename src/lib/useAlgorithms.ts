@@ -4,10 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { algorithms as seedAlgorithms } from "@/data/algorithms";
 import { Algorithm } from "@/types/algorithm";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ??
-  "http://localhost:3000";
-
 interface ApiAlgorithm {
   id: string;
   nome: string;
@@ -57,7 +53,7 @@ function toApi(data: Omit<Algorithm, "id"> | Partial<Algorithm>) {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`, {
+  const response = await fetch(`/api${path}`, {
     ...init,
     headers: {
       "Content-Type": "application/json",
@@ -117,7 +113,7 @@ export function useAlgorithms() {
   };
 
   const deleteAlgorithm = async (id: string) => {
-    const response = await fetch(`${API_URL}/algoritmos/${id}`, {
+    const response = await fetch(`/api/algoritmos/${id}`, {
       method: "DELETE",
     });
 
