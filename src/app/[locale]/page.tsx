@@ -58,12 +58,4 @@ export default function HomePage() {
       </section>
     </>
   );
-<<<<<<< HEAD
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main
-=======
-}
->>>>>>> main
