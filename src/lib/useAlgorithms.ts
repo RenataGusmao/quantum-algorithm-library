@@ -61,11 +61,19 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     },
   });
 
+  console.log("URL:", `/api${path}`);
+  console.log("Status:", response.status);
+  console.log("Content-Type:", response.headers.get("content-type"));
+
   if (!response.ok) {
     throw new Error(`Erro na API: ${response.status}`);
   }
 
-  return response.json() as Promise<T>;
+  const text = await response.text();
+
+  console.log("Resposta:", text.substring(0, 300));
+
+  return JSON.parse(text) as T;
 }
 
 export function useAlgorithms() {
