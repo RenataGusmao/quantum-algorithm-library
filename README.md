@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Quantum Algorithm Explorer
 
 Plataforma web interativa para explorar, filtrar, visualizar e comparar algoritmos quânticos. O projeto organiza uma base de algoritmos em uma experiência de navegação clara, responsiva e orientada à tomada de decisão.
@@ -62,6 +63,8 @@ src/
   app/
     [locale]/
 =======
+=======
+>>>>>>> main
 ## 1.3 Documentação e Guia de Implantação
 
 Este documento descreve como recriar o ambiente do projeto Quantum Algorithm Library, incluindo frontend, backend, variáveis de ambiente e configuração necessária para execução local ou implantação em produção.
@@ -292,11 +295,15 @@ src/
   app/
     [locale]/
       admin/
+<<<<<<< HEAD
+>>>>>>> main
+=======
 >>>>>>> main
       algoritmos/
       busca-guiada/
       comparar/
       sobre/
+<<<<<<< HEAD
 <<<<<<< HEAD
       admin/
     globals.css
@@ -307,10 +314,15 @@ src/
     algoritmos/
     admin/
 =======
+=======
+>>>>>>> main
 
   components/
     admin/
     algoritmos/
+<<<<<<< HEAD
+>>>>>>> main
+=======
 >>>>>>> main
     layout/
 
@@ -333,6 +345,7 @@ src/
   types/
     algorithm.ts
     category.ts
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 public/
@@ -561,6 +574,8 @@ Adicionar estados de loading e erro para chamadas externas.
 Revisar permissões e autenticação para área administrativa.
 Expandir testes e validações.
 =======
+=======
+>>>>>>> main
 Estrutura Principal do Backend
 src/
   server.ts
@@ -627,4 +642,7 @@ As rotas principais da API exigem autenticação.
 Não existem chaves de API de IA no projeto.
 Antes da entrega, recomenda-se validar o frontend com npm run lint e npm run build.
 Antes da publicação da API, recomenda-se configurar corretamente DATABASE_URL e JWT_SECRET no ambiente de produção.
+<<<<<<< HEAD
+>>>>>>> main
+=======
 >>>>>>> main

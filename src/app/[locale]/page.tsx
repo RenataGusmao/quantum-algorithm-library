@@ -59,7 +59,11 @@ export default function HomePage() {
     </>
   );
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> main
 =======
 }
 >>>>>>> main

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import AdminPage from "./adminPage";
@@ -18,6 +19,8 @@ export default async function Page({
 
   return <AdminPage />;
 =======
+=======
+>>>>>>> main
 "use client";
 
 import { useTranslations } from "next-intl";
@@ -152,5 +155,8 @@ export default function AdminPage() {
       </div>
     </div>
   );
+<<<<<<< HEAD
+>>>>>>> main
+=======
 >>>>>>> main
 }
