@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
 
 export default function AdminLoginPage() {
   const router = useRouter();
   const params = useParams();
-  const locale = params.locale as string;
+  const locale = (params?.locale as string) ?? "pt";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -157,7 +158,7 @@ export default function AdminLoginPage() {
           }}
         >
           Não tem uma conta?{" "}
-          <a
+          <Link
             href={`/${locale}/admin/cadastro`}
             style={{
               color: "var(--primary)",
@@ -166,7 +167,7 @@ export default function AdminLoginPage() {
             }}
           >
             Criar conta
-          </a>
+          </Link>
         </div>
       </div>
     </div>

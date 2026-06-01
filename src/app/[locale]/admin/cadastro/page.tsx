@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
@@ -9,7 +10,7 @@ const API_URL =
 export default function AdminCadastroPage() {
   const router = useRouter();
   const params = useParams();
-  const locale = params.locale as string;
+  const locale = (params?.locale as string) ?? "pt";
 
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
@@ -197,7 +198,7 @@ export default function AdminCadastroPage() {
           }}
         >
           Já tem uma conta?{" "}
-          <a
+          <Link
             href={`/${locale}/admin/login`}
             style={{
               color: "var(--primary)",
@@ -206,7 +207,7 @@ export default function AdminCadastroPage() {
             }}
           >
             Entrar
-          </a>
+          </Link>
         </div>
       </div>
     </div>
