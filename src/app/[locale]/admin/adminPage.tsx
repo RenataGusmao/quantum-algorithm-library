@@ -18,6 +18,15 @@ export default function AdminPage() {
     <div>
       <div className="admin-page-header">
         <h1>{t("dashboard")}</h1>
+
+        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+          <Link href="/admin/usuarios/novo" className="btn btn-ghost">
+            + Novo Admin
+          </Link>
+          <Link href="/admin/algoritmos/novo" className="btn btn-primary">
+            + {t("newAlgorithm")}
+          </Link>
+        </div>
       </div>
 
       <div className="admin-stat-grid">
@@ -76,7 +85,10 @@ export default function AdminPage() {
                     />
                   </div>
 
-                  <span className="muted" style={{ fontSize: "13px", minWidth: "20px", textAlign: "right" }}>
+                  <span
+                    className="muted"
+                    style={{ fontSize: "13px", minWidth: "20px", textAlign: "right" }}
+                  >
                     {count}
                   </span>
                 </div>
@@ -92,7 +104,6 @@ export default function AdminPage() {
         <Link href="/admin/algoritmos" className="btn btn-ghost">
           {t("viewAll")}
         </Link>
-
         <Link href="/admin/algoritmos/novo" className="btn btn-primary">
           {t("createAlgorithm")}
         </Link>
