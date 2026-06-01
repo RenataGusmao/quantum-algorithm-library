@@ -4,35 +4,51 @@ import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 
-export default function AdminLoginPage() {
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
+
+export default function AdminCadastroPage() {
   const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) ?? "pt";
 
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [senha, setSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [showSenha, setShowSenha] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+
+    if (senha !== confirmarSenha) {
+      setError("As senhas não coincidem.");
+      return;
+    }
+
+    if (senha.length < 6) {
+      setError("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const res = await fetch("/api/auth/admin", {
+      const res = await fetch(`${API_URL}/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ nome, email, senha, perfil: "admin" }),
       });
 
+      const data = await res.json();
+
       if (res.ok) {
-        router.push(`/${locale}/admin`);
-        router.refresh();
+        router.push(`/${locale}/admin/login`);
       } else {
-        setError("E-mail ou senha incorretos.");
-        setPassword("");
+        setError(data.message ?? "Erro ao criar conta.");
         setLoading(false);
       }
     } catch {
@@ -64,10 +80,10 @@ export default function AdminLoginPage() {
       >
         <div>
           <h1 style={{ margin: "0 0 4px 0", fontSize: "20px", fontWeight: 700 }}>
-            Área administrativa
+            Criar conta
           </h1>
           <p className="muted" style={{ margin: 0, fontSize: "13px" }}>
-            Acesso restrito
+            Área administrativa
           </p>
         </div>
 
@@ -91,12 +107,24 @@ export default function AdminLoginPage() {
           style={{ display: "flex", flexDirection: "column", gap: "16px" }}
         >
           <div className="form-group">
+            <label className="form-label">Nome</label>
+            <input
+              className="form-input"
+              type="text"
+              required
+              autoFocus
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              placeholder="Seu nome completo"
+            />
+          </div>
+
+          <div className="form-group">
             <label className="form-label">E-mail</label>
             <input
               className="form-input"
               type="email"
               required
-              autoFocus
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@exemplo.com"
@@ -108,16 +136,16 @@ export default function AdminLoginPage() {
             <div style={{ position: "relative" }}>
               <input
                 className="form-input"
-                type={showPassword ? "text" : "password"}
+                type={showSenha ? "text" : "password"}
                 required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                placeholder="Mínimo 6 caracteres"
                 style={{ paddingRight: "40px" }}
               />
               <button
                 type="button"
-                onClick={() => setShowPassword((v) => !v)}
+                onClick={() => setShowSenha((v) => !v)}
                 style={{
                   position: "absolute",
                   right: "10px",
@@ -131,11 +159,23 @@ export default function AdminLoginPage() {
                   padding: "0",
                   lineHeight: 1,
                 }}
-                aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                aria-label={showSenha ? "Ocultar senha" : "Mostrar senha"}
               >
-                {showPassword ? "x" : "👁"}
+                {showSenha ? "x" : "👁"}
               </button>
             </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Confirmar senha</label>
+            <input
+              className="form-input"
+              type={showSenha ? "text" : "password"}
+              required
+              value={confirmarSenha}
+              onChange={(e) => setConfirmarSenha(e.target.value)}
+              placeholder="Repita a senha"
+            />
           </div>
 
           <button
@@ -144,7 +184,7 @@ export default function AdminLoginPage() {
             disabled={loading}
             style={{ width: "100%", marginTop: "4px" }}
           >
-            {loading ? "Verificando..." : "Entrar"}
+            {loading ? "Criando conta..." : "Criar conta"}
           </button>
         </form>
 
@@ -157,16 +197,16 @@ export default function AdminLoginPage() {
             color: "var(--muted)",
           }}
         >
-          Não tem uma conta?{" "}
+          Já tem uma conta?{" "}
           <Link
-            href={`/${locale}/admin/cadastro`}
+            href={`/${locale}/admin/login`}
             style={{
               color: "var(--primary)",
               fontWeight: 600,
               textDecoration: "none",
             }}
           >
-            Criar conta
+            Entrar
           </Link>
         </div>
       </div>
