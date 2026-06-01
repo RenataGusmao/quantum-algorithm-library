@@ -35,6 +35,10 @@ function CompareContent() {
   const initialIds =
     searchParams.get("ids")?.split(",").map((id) => id.trim()).filter(Boolean).slice(0, MAX_COMPARE) ?? [];
 
+    console.log("IDs recebidos:", initialIds);
+
+    console.log("Algoritmos encontrados:",initialIds.map(id => algorithms.find(a => a.id === id)));
+
   const [selectedIds, setSelectedIds] = useState<string[]>(initialIds);
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [page, setPage] = useState(1);
