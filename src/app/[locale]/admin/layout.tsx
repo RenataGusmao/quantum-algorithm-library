@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
+import { cookies } from "next/headers"; 
 
 export default async function AdminLayout({
   children,
@@ -8,6 +9,9 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const t = await getTranslations("Admin");
+
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token");
 
   return (
     <div className="admin-layout">
@@ -22,7 +26,7 @@ export default async function AdminLayout({
           {t("algorithms")}
         </Link>
 
-        <AdminLogoutButton />
+        {token && <AdminLogoutButton />}
       </aside>
 
       <div className="admin-content">{children}</div>
