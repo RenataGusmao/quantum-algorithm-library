@@ -1,39 +1,71 @@
 "use client";
 
-import { useLocale } from "next-intl";
-import { useState } from "react";
+import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 
-export function AdminLogoutButton() {
+const navItems = [
+  { href: "/", key: "home" },
+  { href: "/algoritmos", key: "algorithms" },
+  { href: "/comparar", key: "compare" },
+  { href: "/busca-guiada", key: "guidedSearch" },
+  { href: "/sobre", key: "about" },
+] as const;
+
+export function Header() {
+  const t = useTranslations("Header");
   const locale = useLocale();
-  const [loading, setLoading] = useState(false);
-
-  const handleLogout = async () => {
-    setLoading(true);
-
-    try {
-      await fetch("/api/auth/admin", {
-        method: "DELETE",
-      });
-    } finally {
-      window.location.href = `/${locale}/admin/login`;
-    }
-  };
+  const pathname = usePathname();
 
   return (
-    <button
-      type="button"
-      className="admin-sidebar-link"
-      onClick={handleLogout}
-      disabled={loading}
-      style={{
-        width: "100%",
-        border: 0,
-        background: "transparent",
-        textAlign: "left",
-        cursor: loading ? "wait" : "pointer",
-      }}
-    >
-      {loading ? "Saindo..." : "Sair"}
-    </button>
+    <header className="topbar">
+      <div className="container topbar-inner">
+        <Link
+          href="/"
+          className="header-brand"
+          aria-label="Accenture Quantum Algorithm Library"
+        >
+          <Image
+            src="/brand/accenture_logo.png"
+            alt="Accenture"
+            width={132}
+            height={34}
+            priority
+            className="header-logo"
+          />
+          <span className="header-product-name">
+            Quantum Algorithm Library
+          </span>
+        </Link>
+
+        <div className="topbar-actions">
+          <nav className="topbar-nav" aria-label={t("navLabel")}>
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} className="header-link">
+                {t(item.key)}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="language-switch" aria-label={t("languageLabel")}>
+            <Link
+              href={pathname}
+              locale="pt"
+              className={locale === "pt" ? "language-active" : undefined}
+            >
+              PT
+            </Link>
+            <span>|</span>
+            <Link
+              href={pathname}
+              locale="en"
+              className={locale === "en" ? "language-active" : undefined}
+            >
+              EN
+            </Link>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 }
