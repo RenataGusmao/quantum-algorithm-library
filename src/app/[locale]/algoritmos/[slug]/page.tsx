@@ -1,6 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
 import { AlgorithmDetail } from "@/components/algoritmos/AlgorithmDetail";
-import { algorithms } from "@/data/algorithms";
 import { Locale, routing } from "@/i18n/routing";
 
 interface AlgorithmDetailPageProps {
@@ -10,14 +9,9 @@ interface AlgorithmDetailPageProps {
   }>;
 }
 
-export function generateStaticParams() {
-  return routing.locales.flatMap((locale) =>
-    algorithms.map((algorithm) => ({
-      locale,
-      slug: algorithm.slug,
-    }))
-  );
-}
+// generateStaticParams removed: slug list must come from the API at build time.
+// If you need static generation, fetch /api/algoritmos in this function instead.
+// export async function generateStaticParams() { ... }
 
 export default async function AlgorithmDetailPage({
   params,
