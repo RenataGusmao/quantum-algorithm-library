@@ -8,11 +8,9 @@ export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const adminMatch = pathname.match(/^\/(pt|en)\/admin(\/.*)?$/);
-  const isPublicAdminPage = pathname.match(
-    /^\/(pt|en)\/admin\/(login|cadastro)\/?$/
-  );
+  const isLoginPage = pathname.match(/^\/(pt|en)\/admin\/login\/?$/);
 
-  if (adminMatch && !isPublicAdminPage) {
+  if (adminMatch && !isLoginPage) {
     const session = request.cookies.get("admin_session")?.value;
 
     if (session !== "authenticated") {
@@ -28,5 +26,5 @@ export default function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)" ],
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
 };

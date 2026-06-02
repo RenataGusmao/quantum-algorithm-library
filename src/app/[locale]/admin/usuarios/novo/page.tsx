@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 
 export default function NovoAdminPage() {
   const router = useRouter();
   const params = useParams();
-  const locale = params.locale as string;
+  const locale = (params?.locale as string) ?? "pt";
 
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
@@ -22,7 +22,7 @@ export default function NovoAdminPage() {
     setError("");
 
     if (senha !== confirmarSenha) {
-      setError("As senhas não coincidem.");
+      setError("As senhas nao coincidem.");
       return;
     }
 
@@ -59,15 +59,13 @@ export default function NovoAdminPage() {
     <div>
       <div className="admin-page-header">
         <h1>Novo Administrador</h1>
+
         <Link href="/admin" className="btn btn-ghost">
-          ← Voltar
+          Voltar
         </Link>
       </div>
 
-      <div
-        className="card"
-        style={{ maxWidth: "480px", padding: "32px" }}
-      >
+      <div className="card" style={{ maxWidth: "480px", padding: "32px" }}>
         {error && (
           <div
             style={{
@@ -90,6 +88,7 @@ export default function NovoAdminPage() {
         >
           <div className="form-group">
             <label className="form-label">Nome</label>
+
             <input
               className="form-input"
               type="text"
@@ -103,6 +102,7 @@ export default function NovoAdminPage() {
 
           <div className="form-group">
             <label className="form-label">E-mail</label>
+
             <input
               className="form-input"
               type="email"
@@ -115,6 +115,7 @@ export default function NovoAdminPage() {
 
           <div className="form-group">
             <label className="form-label">Senha</label>
+
             <div style={{ position: "relative" }}>
               <input
                 className="form-input"
@@ -122,9 +123,10 @@ export default function NovoAdminPage() {
                 required
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
-                placeholder="Mínimo 6 caracteres"
-                style={{ paddingRight: "40px" }}
+                placeholder="Minimo 6 caracteres"
+                style={{ paddingRight: "56px" }}
               />
+
               <button
                 type="button"
                 onClick={() => setShowSenha((v) => !v)}
@@ -137,19 +139,20 @@ export default function NovoAdminPage() {
                   border: "none",
                   cursor: "pointer",
                   color: "var(--muted)",
-                  fontSize: "16px",
+                  fontSize: "13px",
                   padding: "0",
                   lineHeight: 1,
                 }}
                 aria-label={showSenha ? "Ocultar senha" : "Mostrar senha"}
               >
-                {showSenha ? "x" : "👁"}
+                {showSenha ? "Ocultar" : "Ver"}
               </button>
             </div>
           </div>
 
           <div className="form-group">
             <label className="form-label">Confirmar senha</label>
+
             <input
               className="form-input"
               type={showSenha ? "text" : "password"}
@@ -169,6 +172,7 @@ export default function NovoAdminPage() {
             >
               {loading ? "Cadastrando..." : "Cadastrar administrador"}
             </button>
+
             <Link href="/admin" className="btn btn-ghost">
               Cancelar
             </Link>
