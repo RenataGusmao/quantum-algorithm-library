@@ -1,18 +1,11 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export function AdminLogoutButton() {
   const locale = useLocale();
   const [loading, setLoading] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    
-    const hasToken = document.cookie.split(";").some((item) => item.trim().startsWith("admin_token="));
-    setIsLoggedIn(hasToken);
-  }, []);
 
   const handleLogout = async () => {
     setLoading(true);
@@ -25,11 +18,6 @@ export function AdminLogoutButton() {
       window.location.href = `/${locale}/admin/login`;
     }
   };
-
-  
-  if (!isLoggedIn) {
-    return null;
-  }
 
   return (
     <button
