@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useAlgorithms } from "@/lib/useAlgorithms";
@@ -8,6 +9,20 @@ import { categories } from "@/data/categories";
 export default function AdminPage() {
   const t = useTranslations("Admin");
   const { algorithms, loaded } = useAlgorithms();
+  const [perfil, setPerfil] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadSession() {
+      const res = await fetch("/api/auth/session");
+
+      if (res.ok) {
+        const data = await res.json();
+        setPerfil(data.perfil ?? null);
+      }
+    }
+
+    void loadSession();
+  }, []);
 
   const countByCategory = categories.map((cat) => ({
     name: cat,
@@ -18,6 +33,18 @@ export default function AdminPage() {
     <div>
       <div className="admin-page-header">
         <h1>{t("dashboard")}</h1>
+
+        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+          {perfil === "super_admin" && (
+            <Link href="/admin/usuarios/novo" className="btn btn-ghost">
+              + Novo Admin
+            </Link>
+          )}
+
+          <Link href="/admin/algoritmos/novo" className="btn btn-primary">
+            + {t("newAlgorithm")}
+          </Link>
+        </div>
       </div>
 
       <div className="admin-stat-grid">
@@ -25,12 +52,18 @@ export default function AdminPage() {
           <div className="admin-stat-value">
             {loaded ? algorithms.length : "—"}
           </div>
-          <div className="admin-stat-label">{t("registeredAlgorithms")}</div>
+
+          <div className="admin-stat-label">
+            {t("registeredAlgorithms")}
+          </div>
         </div>
 
         <div className="admin-stat-card">
           <div className="admin-stat-value">{categories.length}</div>
-          <div className="admin-stat-label">{t("availableCategories")}</div>
+
+          <div className="admin-stat-label">
+            {t("availableCategories")}
+          </div>
         </div>
       </div>
 
@@ -51,9 +84,18 @@ export default function AdminPage() {
                   gap: "16px",
                 }}
               >
-                <span style={{ fontWeight: 600, fontSize: "14px" }}>{name}</span>
+                <span style={{ fontWeight: 600, fontSize: "14px" }}>
+                  {name}
+                </span>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "12px", flex: 1 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    flex: 1,
+                  }}
+                >
                   <div
                     style={{
                       flex: 1,
@@ -76,7 +118,14 @@ export default function AdminPage() {
                     />
                   </div>
 
-                  <span className="muted" style={{ fontSize: "13px", minWidth: "20px", textAlign: "right" }}>
+                  <span
+                    className="muted"
+                    style={{
+                      fontSize: "13px",
+                      minWidth: "20px",
+                      textAlign: "right",
+                    }}
+                  >
                     {count}
                   </span>
                 </div>
@@ -88,7 +137,14 @@ export default function AdminPage() {
         )}
       </div>
 
-      <div style={{ display: "flex", gap: "16px", marginTop: "24px", flexWrap: "wrap" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "16px",
+          marginTop: "24px",
+          flexWrap: "wrap",
+        }}
+      >
         <Link href="/admin/algoritmos" className="btn btn-ghost">
           {t("viewAll")}
         </Link>

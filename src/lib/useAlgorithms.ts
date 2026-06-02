@@ -4,10 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { algorithms as seedAlgorithms } from "@/data/algorithms";
 import { Algorithm } from "@/types/algorithm";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ??
-  "http://localhost:3000";
-
 interface ApiAlgorithm {
   id: string;
   nome: string;
@@ -57,7 +53,7 @@ function toApi(data: Omit<Algorithm, "id"> | Partial<Algorithm>) {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`, {
+  const response = await fetch(`/api${path}`, {
     ...init,
     headers: {
       "Content-Type": "application/json",
@@ -65,11 +61,19 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     },
   });
 
+  console.log("URL:", `/api${path}`);
+  console.log("Status:", response.status);
+  console.log("Content-Type:", response.headers.get("content-type"));
+
   if (!response.ok) {
     throw new Error(`Erro na API: ${response.status}`);
   }
 
-  return response.json() as Promise<T>;
+  const text = await response.text();
+
+  console.log("Resposta:", text.substring(0, 300));
+
+  return JSON.parse(text) as T;
 }
 
 export function useAlgorithms() {
@@ -117,7 +121,7 @@ export function useAlgorithms() {
   };
 
   const deleteAlgorithm = async (id: string) => {
-    const response = await fetch(`${API_URL}/algoritmos/${id}`, {
+    const response = await fetch(`/api/algoritmos/${id}`, {
       method: "DELETE",
     });
 

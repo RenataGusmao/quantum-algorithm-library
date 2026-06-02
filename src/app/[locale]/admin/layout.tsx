@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
 
 export default async function AdminLayout({
   children,
@@ -20,6 +21,8 @@ export default async function AdminLayout({
         <Link href="/admin/algoritmos" className="admin-sidebar-link">
           {t("algorithms")}
         </Link>
+
+        <AdminLogoutButton />
       </aside>
 
       <div className="admin-content">{children}</div>

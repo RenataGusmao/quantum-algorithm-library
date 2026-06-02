@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export default function AdminLoginPage() {
   const router = useRouter();
   const params = useParams();
-  const locale = params.locale as string;
+  const locale = (params?.locale as string) ?? "pt";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -65,6 +65,7 @@ export default function AdminLoginPage() {
           <h1 style={{ margin: "0 0 4px 0", fontSize: "20px", fontWeight: 700 }}>
             Área administrativa
           </h1>
+
           <p className="muted" style={{ margin: 0, fontSize: "13px" }}>
             Acesso restrito
           </p>
@@ -91,6 +92,7 @@ export default function AdminLoginPage() {
         >
           <div className="form-group">
             <label className="form-label">E-mail</label>
+
             <input
               className="form-input"
               type="email"
@@ -104,6 +106,7 @@ export default function AdminLoginPage() {
 
           <div className="form-group">
             <label className="form-label">Senha</label>
+
             <div style={{ position: "relative" }}>
               <input
                 className="form-input"
@@ -111,9 +114,10 @@ export default function AdminLoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="********"
                 style={{ paddingRight: "40px" }}
               />
+
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
@@ -126,13 +130,13 @@ export default function AdminLoginPage() {
                   border: "none",
                   cursor: "pointer",
                   color: "var(--muted)",
-                  fontSize: "16px",
+                  fontSize: "13px",
                   padding: "0",
                   lineHeight: 1,
                 }}
                 aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
               >
-                {showPassword ? "x" : "👁"}
+                {showPassword ? "Ocultar" : "Ver"}
               </button>
             </div>
           </div>
