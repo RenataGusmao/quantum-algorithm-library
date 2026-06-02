@@ -1,8 +1,10 @@
-## 1.3 Documentação e Guia de Implantação
+## Documentação e Guia de Implantação
 
 Este documento descreve como recriar o ambiente do projeto Quantum Algorithm Library, incluindo frontend, backend, variáveis de ambiente e configuração necessária para execução local ou implantação em produção.
 
-Observação importante: embora o enunciado mencione serviços de inteligência artificial, este projeto não utiliza IA. Portanto, não há chaves de API de IA, tokens de modelos ou variáveis relacionadas a serviços de inteligência artificial.
+Observação importante: este projeto não utiliza IA. Portanto, não há chaves de API de IA, tokens de modelos ou variáveis relacionadas a serviços de inteligência artificial.
+
+Projeto deployado no vercel: https://quantum-algorithm-library.vercel.app/pt
 
 ## Visão Geral
 
@@ -313,7 +315,6 @@ ANTHROPIC_API_KEY
 GEMINI_API_KEY
 ou qualquer outra chave relacionada a IA.
 
-A menção à IA aparece apenas como possibilidade futura na documentação do backend, mas não há integração ativa no código atual.
 
 Observações Finais
 O frontend consome a API por meio da variável NEXT_PUBLIC_API_URL.
@@ -321,5 +322,4 @@ A API está estruturada para rodar localmente ou em produção no Render.
 O backend utiliza MongoDB Atlas, Prisma e JWT.
 As rotas principais da API exigem autenticação.
 Não existem chaves de API de IA no projeto.
-Antes da entrega, recomenda-se validar o frontend com npm run lint e npm run build.
 Antes da publicação da API, recomenda-se configurar corretamente DATABASE_URL e JWT_SECRET no ambiente de produção.
