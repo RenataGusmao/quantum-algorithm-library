@@ -3,7 +3,7 @@
 import { Suspense, useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { algorithms } from "@/data/algorithms";
+import { useAlgorithms } from "@/lib/useAlgorithms";
 import { Algorithm } from "@/types/algorithm";
 
 const MAX_COMPARE = 3;
@@ -31,13 +31,10 @@ function CompareFallback() {
 function CompareContent() {
   const t = useTranslations("Compare");
   const searchParams = useSearchParams();
+  const { algorithms, loaded } = useAlgorithms();
 
   const initialIds =
     searchParams.get("ids")?.split(",").map((id) => id.trim()).filter(Boolean).slice(0, MAX_COMPARE) ?? [];
-
-    console.log("IDs recebidos:", initialIds);
-
-    console.log("Algoritmos encontrados:",initialIds.map(id => algorithms.find(a => a.id === id)));
 
   const [selectedIds, setSelectedIds] = useState<string[]>(initialIds);
   const [selectedCategory, setSelectedCategory] = useState("Todos");
@@ -46,12 +43,12 @@ function CompareContent() {
   const categories = useMemo(() => {
     const cats = Array.from(new Set(algorithms.map((a) => a.category))).sort();
     return ["Todos", ...cats];
-  }, []);
+  }, [algorithms]);
 
   const filteredAlgorithms = useMemo(() => {
     if (selectedCategory === "Todos") return algorithms;
     return algorithms.filter((a) => a.category === selectedCategory);
-  }, [selectedCategory]);
+  }, [selectedCategory, algorithms]);
 
   const paginatedAlgorithms = filteredAlgorithms.slice(0, page * PAGE_SIZE);
   const hasMore = paginatedAlgorithms.length < filteredAlgorithms.length;
@@ -67,6 +64,16 @@ function CompareContent() {
       return [...current, algorithmId];
     });
   };
+
+  if (!loaded) {
+    return (
+      <section className="page-section">
+        <div className="container">
+          <div className="card">{t("loading")}</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="page-section">

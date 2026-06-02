@@ -1,12 +1,26 @@
-import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
-import { algorithms } from "@/data/algorithms";
+"use client";
 
-export default async function GuidedSearchPage() {
-  const t = await getTranslations("GuidedSearch");
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { useAlgorithms } from "@/lib/useAlgorithms";
+
+export default function GuidedSearchPage() {
+  const t = useTranslations("GuidedSearch");
+  const { algorithms, loaded } = useAlgorithms();
+
   const categories = Array.from(
     new Set(algorithms.map((algorithm) => algorithm.category))
   );
+
+  if (!loaded) {
+    return (
+      <section className="page-section">
+        <div className="container">
+          <div className="card">Carregando...</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="page-section">
