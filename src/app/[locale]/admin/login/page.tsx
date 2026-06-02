@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
+import { useParams } from "next/navigation";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) ?? "pt";
 
@@ -14,7 +13,7 @@ export default function AdminLoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -27,8 +26,7 @@ export default function AdminLoginPage() {
       });
 
       if (res.ok) {
-        router.push(`/${locale}/admin`);
-        router.refresh();
+        window.location.href = `/${locale}/admin`;
       } else {
         setError("E-mail ou senha incorretos.");
         setPassword("");
@@ -65,6 +63,7 @@ export default function AdminLoginPage() {
           <h1 style={{ margin: "0 0 4px 0", fontSize: "20px", fontWeight: 700 }}>
             Área administrativa
           </h1>
+
           <p className="muted" style={{ margin: 0, fontSize: "13px" }}>
             Acesso restrito
           </p>
@@ -91,6 +90,7 @@ export default function AdminLoginPage() {
         >
           <div className="form-group">
             <label className="form-label">E-mail</label>
+
             <input
               className="form-input"
               type="email"
@@ -104,6 +104,7 @@ export default function AdminLoginPage() {
 
           <div className="form-group">
             <label className="form-label">Senha</label>
+
             <div style={{ position: "relative" }}>
               <input
                 className="form-input"
@@ -114,6 +115,7 @@ export default function AdminLoginPage() {
                 placeholder="********"
                 style={{ paddingRight: "40px" }}
               />
+
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
@@ -134,15 +136,35 @@ export default function AdminLoginPage() {
                 aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
               >
                 {showPassword ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
                   </svg>
                 ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                    <circle cx="12" cy="12" r="3"/>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
                   </svg>
                 )}
               </button>

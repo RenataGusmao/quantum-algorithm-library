@@ -1,17 +1,30 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function AdminLogoutButton() {
   const locale = useLocale();
   const [loading, setLoading] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    
-    const hasToken = document.cookie.split(";").some((item) => item.trim().startsWith("admin_token="));
-    setIsLoggedIn(hasToken);
+    async function checkSession() {
+      try {
+        const res = await fetch("/api/auth/session", {
+          cache: "no-store",
+        });
+
+        setIsAuthenticated(res.ok);
+      } catch {
+        setIsAuthenticated(false);
+      } finally {
+        setChecked(true);
+      }
+    }
+
+    void checkSession();
   }, []);
 
   const handleLogout = async () => {
@@ -26,8 +39,7 @@ export function AdminLogoutButton() {
     }
   };
 
-  
-  if (!isLoggedIn) {
+  if (!checked || !isAuthenticated) {
     return null;
   }
 
