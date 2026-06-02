@@ -4,6 +4,13 @@ const API_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ??
   "http://localhost:3000";
 
+function getJwtPayload(token: string) {
+  const payload = token.split(".")[1];
+  return JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as {
+    perfil?: string;
+  };
+}
+
 export async function POST(request: Request) {
   const { email, password } = await request.json();
 
@@ -37,7 +44,10 @@ export async function POST(request: Request) {
     );
   }
 
-  const res = NextResponse.json({ ok: true });
+  const payload = getJwtPayload(data.token);
+  const perfil = payload.perfil ?? "admin";
+
+  const res = NextResponse.json({ ok: true, perfil });
 
   res.cookies.set("admin_session", "authenticated", {
     httpOnly: true,
@@ -47,6 +57,13 @@ export async function POST(request: Request) {
   });
 
   res.cookies.set("admin_token", data.token, {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 8,
+  });
+
+  res.cookies.set("admin_role", perfil, {
     httpOnly: true,
     sameSite: "lax",
     path: "/",
@@ -65,6 +82,11 @@ export async function DELETE() {
   });
 
   res.cookies.set("admin_token", "", {
+    path: "/",
+    maxAge: 0,
+  });
+
+  res.cookies.set("admin_role", "", {
     path: "/",
     maxAge: 0,
   });
